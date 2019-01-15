@@ -1,0 +1,42 @@
+{
+  "cupones": {
+    "etiquetas": 
+        [
+            "Correo electrónico",
+            "Nombres",
+            "Apellidos",
+            "Número de teléfono",
+            "Número de factura",
+            "Monto de la compra",
+            "Desea afiliarse al club de consumidores y formar parte de nuestra comunidad"
+        ],
+        "campos": [
+            "email",
+            "nombres",
+            "apellidos",
+            "telefono",
+            "factura",
+            "monto",
+            "socio",
+            "id_proveedor"
+        ]
+    },
+"otro": {
+    "etiquetas": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+        ],
+        "campos": [
+            "nombres",
+            "apellidos",
+            "email",
+            "telefono",
+            "factura",
+            "monto"
+        ]
+    }
+}

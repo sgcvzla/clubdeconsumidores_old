@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes">
+	<title>SGC Consultores C.A.</title>
+	<link rel="stylesheet" href="../css/styles.css">
+	<script type="text/javascript" src="../js/funciones.js"></script>
+</head>
+<body onload='fparametros("cupones")'>
+	<div align="center">
+		<div class="logo">
+			<img id="logo" src="" alt="">
+		</div>
+	</div>
+	<div id="container">
+		<h3 id="tituloformulario" align="center"></h3>
+
+		<!-- email -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="email" size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @)" />
+		</div>
+		<!-- nombres -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text" size="50" maxlength="100" />
+		</div>
+		<!-- apellidos -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text" size="50" maxlength="100" />
+		</div>
+		<!-- teléfono -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text" size="50" maxlength="100" />
+		</div>
+		<!-- factura -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text" size="50" maxlength="100" />
+		</div>
+		<!-- monto -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text" size="50" maxlength="100" />
+		</div>
+		<!-- afiliación -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="checkbox" />
+		</div>
+
+		<!-- Variable para controlar el proveedor -->
+		<input id="" class="campo" type="hidden" value="1"/>
+
+		<!-- Linea de botones -->
+		<div class="btns">
+			<button id="enviar" onclick="enviar()" style="width: 7em;">Enviar</button>
+			<button id="limpiar" onclick="flimpiar()" style="width: 7em;">Limpiar</button>
+		</div>
+	</div>
+<script>
+function enviar(){
+	var respuesta = fgrabar();
+	console.log(respuesta);
+	if (respuesta.exito=='SI') {
+		alert(respuesta.mensaje);
+		flimpiar();
+	} else {
+		alert(respuesta.mensaje);
+	}
+}
+</script>
+</body>
+</html>
