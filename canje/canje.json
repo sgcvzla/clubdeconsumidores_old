@@ -1,0 +1,19 @@
+{
+    "titulo":"Canje de cupones",
+    "etiquetas": [
+        "Clave de acceso",
+        "Código de cupon"
+    ],
+    "campos": [
+        "clavecanje",
+        "id_proveedor",
+        "cuponlargo"
+    ],
+    "mensajes": {
+        "claveincorrecta": ["Clave de acceso incorrecta, intente nuevamente.","Si no conoce su clave comuniquese al +584244071820"],
+        "cuponvalido": ["¡FELICIDADES!","Cupón valido, reclama tu premio."],
+        "cuponinvalido": ["Cupón inválido, ya usado o anulado, intente nuevamente.","Si tiene problemas comuniquese al +584244071820"],
+        "cuponincorrecto": ["Código de cupón incorrecto, intente nuevamente.","Si tiene problemas comuniquese al +584244071820"],
+        "comercioincorrecto": ["Este cupón petenece a otro comercio.","Verifique los datos y vuelva a ingresar.","Si tiene problemas comuniquese al +584244071820"]
+    }
+}

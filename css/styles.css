@@ -1,78 +1,74 @@
 * {
-	margin: 0;
-	padding:0;
-}
-
-.logo {
-	margin-top: 10px;
-	height: auto;
-	width: 12em;
-	text-align: center;
-}
-
-img {
-	width: 100%;
-	height: auto;
-	object-fit: contain;
+    padding: 0;
+    margin: 0;
+    --columnas: 1;
+    --filas: 1;
+    --ancho: 240px;
+    --alto: 240px;
+    --linea: 10px;
+    /* font-size: 10px; */
 }
 
 #container {
-	padding: 1em;
-	margin: auto;
-	width: 38%;
-	min-width: 400px;
-	background: lightgray;
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
+    padding: 1em;
+    margin: auto;
+    width: 80%;
+    /* min-width: 400px; */
+    /* background: lightgray; */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
-.cmps {
-	padding: 0.5em 0 0 0;
-	display: flex;
-	flex-direction: row;
+.catalogo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, var(--ancho));
+    grid-template-rows: repeat(auto-fit, var(--alto));
+    justify-content: center;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 100%;
+    grid-gap: var(--linea);
+    grid-auto-flow: row dense;
 }
 
-.etiq {
-	width: 37.5%;
-	height: 20px;
-	justify-content: middle;
+.item {
+    /* background: #fff; */
+    background: lightgray;
+    display: grid;
+    height: var(--alto);
+    /* grid-template-columns: calc(var(--ancho)*.7) 1 1;
+    grid-template-rows: calc(var(--alto)*.7) 1 1; */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: black solid thin;
 }
 
-.campo {
-	height: 20px;
+.img_comercio {
+    width: auto;
+    height: auto;
+    max-width: calc(var(--ancho)*.7);
+    max-height: calc(var(--alto)*.7);
+    object-fit: fill;
+    display: block;
 }
 
-.selec {
-	height: 20px;
-}
 
-.btns {
-	padding-top: 0.5em;
-	text-align: right;
-}
-
-@media only screen and (max-width: 1260px) {
-	.logo {
-		padding-bottom: 0.5em;
+@media only screen and (max-width: 960px) {
+    * {
+        width: 100%;
+        font-size: 110%;
+    }
+	h2 {
+		text-align: center;
 	}
 	h3 {
-		padding-bottom: 0.5em;
+		color: blue;
 	}
-	.cmps {
-		padding: 0 0 2.25em 0;
-	}
-}
-
-@media only screen and (max-width: 768px) {
-	* {
-		width: 100%;
-	}
-	.cmps {
-		flex-direction: column;
-	}
-	.etiq {
-		width: 50%;
-		justify-content: left;
-	}
+    h5 {
+        text-align: center;
+    }
+    #container {
+        width: 80%;
+    }
 }

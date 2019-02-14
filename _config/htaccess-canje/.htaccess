@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^canje.clubdeconsumidores.com.ve$
+  RewriteRule (.*)$ http://www.clubdeconsumidores.com.ve/canje/$1 [R=301,L]
+</IfModule>

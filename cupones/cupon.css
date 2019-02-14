@@ -1,0 +1,99 @@
+* {
+    padding: 0;
+    margin: 0;
+    --columnas: 1;
+    --filas: 1;
+    --ancho: 240px;
+    --alto: 240px;
+    --linea: 10px;
+    /* font-size: 10px; */
+}
+
+.logo {
+    margin-top: 10px;
+    height: auto;
+    width: 12em;
+    text-align: center;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+#container {
+    padding: 1em;
+    margin: auto;
+    width: 40%;
+    /* min-width: 400px; */
+    background: lightgray;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.cmps {
+    padding: 0.5em 0 0 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.etiq {
+    width: 37.5%;
+    /* height: 20px; */
+    justify-content: middle;
+}
+
+.etiq2 {
+    width: 100%;
+}
+
+/* .campo {
+    height: 20px;
+}
+ */
+.selec {
+    height: 20px;
+}
+
+.btns {
+    padding-top: 0.5em;
+    text-align: right;
+}
+
+@media only screen and (max-width: 960px) {
+    * {
+        width: 100%;
+        font-size: 110%;
+    }
+    #container {
+        width: 80%;
+    }
+    .cmps {
+        flex-direction: column;
+    }
+    .etiq {
+        width: 100%;
+        justify-content: left;
+    }
+    .btns {
+        text-align: center;
+    }
+    button {
+        margin-top: 0.5em;        
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+    .logo {
+        padding-bottom: 0.5em;
+    }
+    h3 {
+        padding-bottom: 0.5em;
+    }
+    .cmps {
+        padding: 0 0 2.25em 0;
+    }
+}
+

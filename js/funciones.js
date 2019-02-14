@@ -1,5 +1,26 @@
-function fparametros(forma) {
-	var logo;
+// Función para mostrar los decimales que se quieran
+var formatNumber = {
+	separador: ".", // separador para los miles
+	sepDecimal: ',', // separador para los decimales
+	formatear: function (num) {
+		num += '';
+		var splitStr = num.split('.');
+		var splitLeft = splitStr[0];
+		var splitRight = splitStr.length > 1 ? this.sepDecimal + splitStr[1] : this.sepDecimal + '00';
+		var regx = /(\d+)(\d{3})/;
+		while (regx.test(splitLeft)) {
+			splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
+		}
+		return this.simbol + splitLeft + splitRight;
+	},
+	new: function (num, simbol) {
+		this.simbol = simbol || '';
+		return this.formatear(num);
+	}
+}
+
+// Cargar los parámetros generales del sistema
+function fparametros() {
 	// cargar parámetros de la tabla
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
@@ -7,90 +28,40 @@ function fparametros(forma) {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
 				document.title = respuesta.parametros.nombresistema;
-				logo = respuesta.parametros.logosistema;
-				document.getElementById("logo").src = "../img/"+logo;
-				document.getElementById("logo").title = document.title;
+				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 			}
 		}
 	};
-	xmlhttp.open("GET", "../php/parametros.php", false);
+	xmlhttp.open("GET", "php/parametros.php", false);
 	xmlhttp.send();
-
-	// cargar parámetros del json: etiquetas y elementos de forma
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function () {
-		if (this.readyState == 4 && this.status == 200) {
-			parametros = JSON.parse(this.responseText);
-			document.title = document.title + ' - '+ parametros.etiquetasfijas.titulopagina;
-			tituloformulario = parametros.etiquetasfijas.tituloformulario;
-			document.getElementById("tituloformulario").innerHTML = tituloformulario;
-		}
-	};
-	xmlhttp.open("GET", "../_config/config.json", false);
-	xmlhttp.send();
-
-	fcargarcampos(forma);
 }
 
-function fgrabar() {
-	var datos = new FormData();
-	var respuesta;
-
-	if (document.getElementsByClassName("campo").length) {
-		for (campo = 0; campo < document.getElementsByClassName("campo").length; campo++) {
-			if (document.getElementsByClassName("campo")[campo].type=='checkbox'){
-				datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].checked);
-			} else {
-				datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].value);
-			}
-		}
-	}
-
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			console.log(this.responseText);
-			respuesta = JSON.parse(this.responseText);
-		} else {
-			mensaje = '{"exito":"NO","mensaje":"Falló el registro del cupón, \ncomuniquese por Whatsapp al +584244071820","cupon":"0"}';
-			respuesta = JSON.parse(mensaje);
-			console.log(respuesta);
-		}
-	};
-	xmlhttp.open("POST", "../php/registracupon.php", false);
-	xmlhttp.send(datos);
-	return respuesta;
+function fexisteUrl(url) {
+	var http = new XMLHttpRequest();
+	http.open('HEAD', url, false);
+	http.send();
+	return http.status != 404;
 }
 
-function flimpiar() {
-	if (document.getElementsByClassName("campo").length) {
-		for (campo = 0; campo < document.getElementsByClassName("campo").length; campo++) {
-			document.getElementsByClassName("campo")[campo].value = "";
+function fmensaje(texto) {
+	var mensaje = '';
+	for (let index = 0; index < texto.length; index++) {
+		mensaje += texto[index];
+		if (texto.length > 1 && index + 1 < texto.length) {
+			mensaje += '\n';
 		}
 	}
+	return mensaje;
 }
 
-function fcargarcampos(formulario){
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function () {
-		if (this.readyState == 4 && this.status == 200) {
-			respuesta = JSON.parse(this.responseText);
-		}
-	};
-	xmlhttp.open("GET", "../_config/formularios.json", false);
-	xmlhttp.send();
+function fparamurl(xurl) {
+	var paramstr = xurl;
+	var paramarr = paramstr.split ("&");
+	var params = {};
 
-	console.log(respuesta[formulario]);
-	if (respuesta[formulario].etiquetas.length== document.getElementsByClassName("etiq").length) {
-		for (campo = 0; campo < respuesta[formulario].etiquetas.length; campo++) {
-			document.getElementsByClassName("etiq")[campo].innerHTML = respuesta[formulario].etiquetas[campo];
-		}
-		console.log(respuesta[formulario].campos.length);
-		for (campo = 0; campo < respuesta[formulario].campos.length; campo++) {
-			document.getElementsByClassName("campo")[campo].setAttribute("id",respuesta[formulario].campos[campo]);
-			console.log(respuesta[formulario].campos[campo]);
-		}
-	} else {
-		alert('Error en definición de etiquetas de campos');
+	for ( var i = 0; i < paramarr.length; i++) {
+	    var tmparr = paramarr[i].split("=");
+	    params[tmparr[0]] = decodeURI(tmparr[1]);
 	}
+	return params;
 }

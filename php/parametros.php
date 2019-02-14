@@ -8,7 +8,7 @@ $result = mysqli_query($link,$query);
 if ($row = mysqli_fetch_array($result)) {
 	$nombresistema = $row["nombresistema"];
 	$logosistema = $row["logosistema"];
-	$respuesta = '{"exito":"SI","parametros":{"nombresistema":"'. $row["nombresistema"] .'","logosistema":"' . $row["logosistema"] . '"}}';
+	$respuesta = '{"exito":"SI","parametros":{"nombresistema":"'. utf8_encode($nombresistema) .'","logosistema":"' . $logosistema . '"}}';
 } else {
 	$respuesta = '{"exito":"NO","parametros":{}}';
 }

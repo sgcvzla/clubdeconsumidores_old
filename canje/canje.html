@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="canje.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<script type="text/javascript" src="canje.js"></script>
+	</head>
+<body onload='cargaforma()'>
+	<div align="center">
+		<div class="logo">
+			<img id="logo" src="" alt="">
+		</div>
+	</div>
+	<div id="container">
+		<h3 id="tituloformulario" align="center" style="background:white;"></h3>
+
+		<!-- login -->
+		<div id="login" style="background:white;">
+			<!-- login -->
+			<div class="cmps" style="background:white;">
+				<span class="etiq" style="background:white;"></span>
+				<input id="" class="campo" type="password" size="50" maxlength="100" style="background:lightblue;"/>
+			</div>
+
+			<!-- Variable para controlar el proveedor -->
+			<input id="" class="campo" type="hidden" />
+
+			<!-- Linea de botones -->
+			<div class="btns" style="background:white;">
+				<button id="enviar" onclick="buscausuario()" style="width: 7em;">Enviar</button>
+				<button id="limpiar" onclick="limpiausuario()" style="width: 7em;">Limpiar</button>
+			</div>
+		</div>
+
+
+		<!-- canje -->
+		<div id="canjear" style="display:none;background:white;">
+			<!-- canjear -->
+			<div class="cmps" style="background:white;">
+				<span class="etiq" style="background:white;"></span>
+				<input id="" class="campo" type="text" size="50" maxlength="100" style="background:lightgreen;"/>
+			</div>
+
+			<!-- Linea de botones -->
+			<div class="btns" style="background:white;">
+				<button id="enviar" onclick="enviacupon()" style="width: 7em;">Enviar</button>
+				<button id="limpiar" onclick="limpiacupon()" style="width: 7em;">Limpiar</button>
+			</div>
+		</div>
+
+	</div>
+<script>
+
+</script>
+</body>
+</html>

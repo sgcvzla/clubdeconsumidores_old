@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="css/styles.css">
+		<script type="text/javascript" src="js/funciones.js"></script>
+		<script type="text/javascript" src="index.js"></script>
+	</head>
+	<body onload='cargadatos()'>
+		<div id="container">
+			<h2>Club de consumidores</h2>
+			<h5>Servcios a los socios</h5>
+			<h3 id="tituloformulario" align="center">SELECCIÓN DEL COMERCIO</h3>
+			<br/>
+			<div id="cintafiltros" class="filtros" style="text-align:center;">
+				<div id="categoria">Escoja la categoría del comercio: </div>
+				<div id="listafiltros">
+					<select id="opciones_filtros" onchange="filtrar(this)" style="width:auto;">
+						<option value="Todas">Todas</option>
+					</select>
+				</div>
+				<br />
+			</div>
+			<br/>
+			<div id="comercios" class="catalogo">
+			</div>
+		</div>
+	</body>
+</html>

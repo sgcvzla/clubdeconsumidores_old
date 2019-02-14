@@ -1,0 +1,13 @@
+socios
+id,email,telefono,nombres,apellidos
+
+cupones
+id,cupon,id_socio,status,factura,monto,tipopremio,premio -> socio,email,telefono,nombres,apellidos
+
+_statuscupon
+
+
+_tipopremio
+
+
+_parametros
