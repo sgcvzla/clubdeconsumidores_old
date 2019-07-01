@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="encuesta.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<script type="text/javascript" src="encuesta.js"></script>
+	</head>
+<body onload='cargaforma()'>
+	<div align="center">
+		<div class="logo">
+			<img id="logo" src="" alt="">
+		</div>
+	</div>
+	<div id="container">
+		<h3 id="tituloformulario" align="center"></h3>
+		<br/>
+
+		<!-- email -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="email"  size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" />
+		</div>
+		<!-- ocupacion -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="200" />
+		</div>
+		<!-- telefono -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+
+		<!-- primera pregunta -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input class="campo" type="checkbox" />
+		</div>
+		<!-- segunda pregunta -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<option value="sin seleccion">Seleccione una opción</option>
+				<option value="excelente">Excelente</option>
+				<option value="bueno">Muy bueno</option>
+				<option value="regular">Regular</option>
+				<option value="deficiente">Deficiente</option>
+				<option value="no opina">No opina</option>
+			</select>
+		</div>
+		<!-- tercera pregunta -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="200" maxlength="100" />
+		</div>
+
+		<!-- Variable para controlar el proveedor -->
+		<input id="" class="campo" type="hidden" />
+		<!-- Variable para controlar el socio -->
+		<input id="" class="campo" type="hidden" />
+
+		<!-- Linea de botones -->
+		<div class="btns">
+			<button id="enviar" onclick="enviar()" style="width: 7em;">Enviar</button>
+			<button id="limpiar" onclick="limpiar()" style="width: 7em;">Limpiar</button>
+		</div>
+	</div>
+<script>
+
+</script>
+</body>
+</html>

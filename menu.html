@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Club de consumidores</title>
+		<link rel="stylesheet" href="menu.css">
+		<script type="text/javascript" src="js/funciones.js"></script>
+	</head>
+	<body>
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="img/logoclub.png" alt="">
+			</div>
+			<h2 style="text-align: center; color: black;">Club de consumidores</h2>
+			<h5 style="text-align: center; color: black;">Servicios a los socios</h5>
+			<div id="div1" align="center">
+				<h3>Menú principal</h3>
+				<br/>
+				<div id="comercios" class="catalogo">
+					<div class="item" align="center">
+						<div class="imagen" align="center">
+							<a id="lector" href="" onclick="canjear()">
+								<!-- <img class="img_opcion" src="" title="Lector" /> -->
+								Canjear cupones
+							</a>
+						</div>
+					</div>
+					<div class="item" align="center">
+						<div class="imagen" align="center">
+							<a id="cuponera" href="" onclick="alert('En Construcción')">
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+								Catálogo
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			function canjear() {
+				idp = sessionStorage.getItem("id_proveedor");
+				console.log(idp);
+				alert(idp);
+			}
+		</script>
+	</body>
+</html>

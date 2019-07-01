@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="encuesta.css">
+		<script type="text/javascript" src="../../js/funciones.js"></script>
+		<script type="text/javascript" src="encuesta.js"></script>
+	</head>
+<body onload='cargalogo()'>
+	<div align="center">
+		<div class="logo">
+			<img id="logo" src="" alt="">
+		</div>
+	</div>
+	<div align="center">
+		<h3>¡¡¡Muchas gracias por ayudarnos a prestar un mejor servicio!!!</h3>
+		<p>Te esperamos pronto.</p>
+	</div>
+<script>
+function buscatitulo() {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			respuesta = JSON.parse(this.responseText);
+			if (respuesta.exito == 'SI') {
+				document.title = respuesta.parametros.nombresistema;
+				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+			}
+		}
+	};
+	xmlhttp.open("GET", "../../php/parametros.php", false);
+	xmlhttp.send();
+}
+
+function cargalogo() {
+	buscatitulo();
+	var logo;
+
+	var titulo = sessionStorage.getItem("nombresistema");
+	// cargar parámetros de la tabla
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log(this.responseText);
+			respuesta = JSON.parse(this.responseText);
+			document.title = titulo;
+			logo = respuesta.logo;
+			if (logo!="") {
+				document.getElementById("logo").src = "../../img/" + logo;
+			} else {
+				document.getElementById("logo").src = "../../img/" + 'sin_imagen.jpg';
+			}
+			document.getElementById("logo").title = respuesta.nombre;
+		}
+	};
+	xmlhttp.open("GET", "../../php/buscaprov.php?prov=2", false);
+	xmlhttp.send();
+}
+</script>
+</body>
+</html>

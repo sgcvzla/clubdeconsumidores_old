@@ -1,0 +1,100 @@
+* {
+    padding: 0;
+    margin: 0;
+    --columnas: 1;
+    --filas: 1;
+    --ancho: 180px;
+    --alto: 100px;
+    --linea: 10px;
+    /* font-size: 10px; */
+}
+
+#container {
+    padding: 1em;
+    margin: auto;
+    width: 80%;
+    /* min-width: 400px; */
+    /* background: lightgray; */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.logo {
+    margin: 10px auto;
+    height: auto;
+    width: 8em;
+    text-align: center;
+}
+
+.img-logo {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.tabla {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: solid 1px darkgray;
+}
+
+.fila {
+    display: grid;
+    grid-template-areas:  "col1 col2 col3 col4";
+    grid-template-columns: 20% 25% 45% 10%;
+    /* grid-gap: var(--linea); */
+    grid-auto-flow: row dense;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.titulo {
+    background: lightblue;
+    font-weight: bold;
+}
+
+.par {
+    background: none;
+}
+
+.impar {
+    background: lightgray;
+}
+
+.columna1 {
+    width: 20%;
+    grid-area: col1;
+    text-align: center;
+    display:  inline-block;
+}
+
+.columna2 {
+    width: 25%;
+    grid-area: col2;
+    text-align: center;
+    display:  inline-block;
+}
+
+.columna3 {
+    width: 45%;
+    grid-area: col3;
+    text-align: center;
+    display:  inline-block;
+}
+
+.columna4 {
+    width: 10%;
+    grid-area: col4;
+    text-align: center;
+    display:  inline-block;
+}
+
+.despliegue {
+    width: 100%;
+    grid-area: despliegue;
+    text-align: center;
+    display:  inline-block;
+}

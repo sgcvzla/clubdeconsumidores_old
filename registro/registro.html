@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="registro.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<script type="text/javascript" src="registro.js"></script>
+	</head>
+<body onload='cargaforma()'>
+	<div align="center">
+		<div class="logo">
+			<img id="logo" src="" alt="">
+		</div>
+	</div>
+	<div id="container">
+		<h3 id="tituloformulario" align="center"></h3>
+		<p align="center">Completa estos datos para conocerte mejor <br/>
+		<b style="font-size: 80%;">(tranquilo, no lo compartiremos con nadie)</b></p>
+		<br/>
+
+		<!-- fecha de nacimiento -->
+		<div class="cmps">
+			<!-- <span class="etiq" style="height:18px;"></span> -->
+			<span class="etiq"></span>
+			<!-- <input id="" class="campo" type="date" style="height:1.2em;width:9em;" /> -->
+			<input id="" class="campo fecha" type="date" />
+		</div>
+		<!-- sexo -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<option value="nodefinido">Seleccione una opción</option>
+				<option value="femenino">Femenino</option>
+				<option value="masculino">Masculino</option>
+				<option value="noresponde">Prefiere no responder</option>
+			</select>
+		</div>
+		<!-- número de cédula -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="10" />
+		</div>
+		<!-- número de rif -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="10" />
+		</div>
+		<!-- otro telefono -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- Pais -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<!-- <option value="nodefinido">Seleccione una opción</option> -->
+				<option value="Venezuela">Venezuela</option>
+			</select>
+		</div>
+		<!-- estado -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<!-- <option value="nodefinido">Seleccione una opción</option> -->
+				<option value="Carabobo">Carabobo</option>
+				<option value="Aragua">Aragua</option>
+			</select>
+		</div>
+		<!-- ciudad -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<!-- <option value="nodefinido">Seleccione una opción</option> -->
+				<option value="Valencia">Valencia</option>
+				<option value="Naguanagua">Naguanagua</option>
+				<option value="Maracay">Maracay</option>
+			</select>
+		</div>
+		<!-- sector -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<!-- <option value="nodefinido">Seleccione una opción</option> -->
+				<option value="Valencia">Valencia</option>
+				<option value="Naguanagua">Naguanagua</option>
+				<option value="Maracay">Maracay</option>
+			</select>
+		</div>
+		<!-- dirección -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="250" />
+		</div>
+		<!-- tiene vehiculo -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input class="campo" type="checkbox" />
+		</div>
+		<!-- profesion -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- ocupacion -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- lugar de trabajo -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- direccion de trabajo -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- email de trabajo -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="email"  size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" />
+		</div>
+		<!-- telefono de trabajo -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- estado civil -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;">
+				<option value="nodefinido">Seleccione una opción</option>
+				<option value="soltero">Soltero</option>
+				<option value="casado">Casado</option>
+				<option value="divorciado">Divorciado</option>
+				<option value="viudo">Viudo</option>
+				<option value="complicado">Es complicado</option>
+			</select>
+		</div>
+		<!-- nombre pareja -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- cumpleaños de la pareja -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo fecha" type="date" />
+		</div>
+		<!-- fecha de aniversario -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo fecha" type="date" />
+		</div>
+		<!-- padre vivo -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input class="campo" type="checkbox" />
+		</div>
+		<!-- nombre padre -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- cumpleaños del padre -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo fecha" type="date" />
+		</div>
+		<!-- madre viva -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input class="campo" type="checkbox" />
+		</div>
+		<!-- nombre madre -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+		</div>
+		<!-- cumpleaños de la madre -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo fecha" type="date" />
+		</div>
+		<!-- numero de hijos -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
+		</div>
+		<!-- hijos menores de 5 -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
+		</div>
+		<!-- hijos entre 5 y 10 -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
+		</div>
+		<!-- hijos entre 11 y 20 -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
+		</div>
+		<!-- hijos mayores de 20 -->
+		<div id="socio" class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
+		</div>
+
+		<!-- Variable para controlar el proveedor -->
+		<input id="" class="campo" type="hidden" />
+		<!-- Variable para controlar el socio -->
+		<input id="" class="campo" type="hidden" />
+
+		<!-- Linea de botones -->
+		<div class="btns">
+			<button id="enviar" onclick="enviar()" style="width: 7em;">Enviar</button>
+			<button id="limpiar" onclick="limpiar()" style="width: 7em;">Limpiar</button>
+		</div>
+	</div>
+<script>
+
+</script>
+</body>
+</html>

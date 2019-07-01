@@ -1,0 +1,16 @@
+{
+    "titulo":"Encuesta",
+    "etiquetas": [
+        "Pregunta"
+    ],
+    "campos": [
+        {"nombre":"pregunta1","tipo":"string"}
+    ],
+    "mensajes": {
+        "fallaregistro": ["Falló el registro","Comuniquese por Whatsapp al +584244071820."],
+        "exitoregistro": ["Registro exitoso","Muchas gracias por ayudarnos a","prestarte un mejor servicio"],
+        "exitonuevo": ["Registro exitoso","Te invitamos a registrar tu factura en","nuestro club de consumidores","ingresa en www.clubdeconsumidores.com.ve"],
+        "yaregistrado": ["El email ya esta registrado","Si no fuiste tú, comunicate","por Whatsapp al +584244071820."],
+        "noencuesta": ["Encuesta no definida","Comuniquese por Whatsapp al +584244071820."]
+    }
+}

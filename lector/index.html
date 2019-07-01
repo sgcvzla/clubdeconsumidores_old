@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SGC Consultores C.A. - Lector de QR</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <script type="text/javascript" src="../js/funciones.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <h3 style="text-align: center; color: black;">Club de consumidores</h3>
+            <h5 style="text-align: center; color: black;">Servicios a los socios</h5>
+            <h3 id="tituloformulario" align="center">LECTOR DE CÓDIGOS QR</h3>
+            <p align="center">Coloque el código en el siguiente recuadro, al ser leído se redireccionará su navegador a la sección que corresponda.</p>
+            <br/>
+            <button style="width: 220px; height: 30px; margin: auto;" onclick="botonpulsado()">Encender/Apagar cámara</button>
+            <br/>
+            <select class="form-control" id="camera-select" style="width: 220px; margin: auto;"></select>
+            <br/>
+            <div style="width: 220px; height: 220px; position: relative; margin: auto; border: 1px solid;">
+                <canvas id="lector" style="width: 220px; height: 220px;"></canvas>
+                <div class="scanner-laser laser-rightBottom"></div>
+                <div class="scanner-laser laser-rightTop"></div>
+                <div class="scanner-laser laser-leftBottom"></div>
+                <div class="scanner-laser laser-leftTop"></div>
+            </div>
+            <p id="mensaje"></p>
+            <br/>
+            <button id="volver" style="width: 60px; height: 30px; margin: auto;" onclick="volveralmenu()">Volver</button>
+        </div>
+        <script type="text/javascript" src="js/qrcodelib.js"></script>
+        <script type="text/javascript" src="js/webcodecamjs.js"></script>
+        <script type="text/javascript">
+            var params = fparamurl(window.location.search.substr(1));
+            if (params.menu==undefined) {
+                document.getElementById("volver").style.display = 'none';
+            }
+
+            var pulsado = true;
+            var arg = {
+                resultFunction: function(result) {
+                    lector.stop();
+                    window.location.replace(result.code);
+                }
+            };
+            // var lector = new WebCodeCamJS("canvas").buildSelectMenu("#camera-select", "environment|back").init(arg).play();
+            var lector = new WebCodeCamJS("canvas").buildSelectMenu("#camera-select", "environment|back").init(arg).play();
+            lector.getOptimalZoom();
+            document.querySelector("#camera-select").addEventListener("change", function() {
+                if (lector.isInitialized()) {
+                    lector.stop().play();
+                }
+            });
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+            // navigator.mediaDevices.enumerateDevices().then(devices => {
+            //     let sourceId = null;
+            //     // enumerate all devices
+            //     for (var device of devices) {
+            //         // if there is still no video input, or if this is the rear camera
+            //         if (device.kind == 'videoinput' &&
+            //             (!sourceId || device.label.indexOf('back') !== -1)) {
+            //             sourceId = device.deviceId;
+            //         }
+            //     }
+            //     // we didn't find any video input
+            //     if (!sourceId) {
+            //         throw 'No hay cámara trasera';
+            //     }
+            //     let constraints = {
+            //         video: {
+            //             sourceId: sourceId
+            //         }
+            //     };
+            //     navigator.mediaDevices.getUserMedia(constraints);
+            //     // navigator.mediaDevices.getUserMedia(constraints).then(handleStream);
+            // });
+////////////////////////////////////////////////////////////////////////////////////////////////////
+            var a = window.navigator.mediaDevices.enumerateDevices();
+
+            function botonpulsado() {
+                if (pulsado) { 
+                    document.getElementById("camera-select").disabled = true;
+                    document.getElementById("lector").style.display = "none";
+                    // lector.stop();
+                    pulsado = false; 
+                } else { 
+                    document.getElementById("camera-select").disabled = false;
+                    document.getElementById("lector").style.display = "block";
+                    // lector.play();
+                    pulsado = true;
+                }
+            }
+
+            function volveralmenu() {
+                window.location.replace("../"+params.menu+"/menu.html")
+            }
+
+        </script>
+    </body>
+</html>

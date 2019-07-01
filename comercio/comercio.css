@@ -1,0 +1,110 @@
+* {
+    padding: 0;
+    margin: 0;
+    --columnas: 1;
+    --filas: 1;
+    --ancho: 240px;
+    --alto: 240px;
+    --linea: 10px;
+}
+
+#container {
+    padding: 1em;
+    margin: auto;
+    width: 60%;
+}
+
+.logo {
+    margin: 10px auto;
+    height: auto;
+    width: 12em;
+    text-align: center;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+#div1 {
+    padding: 0.5em 0 0.5em 0;
+    background: lightgray;
+}
+
+.cmps {
+    padding: 0.5em 0 0 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.etiq {
+    width: 37.5%;
+    /* height: 20px; */
+    justify-content: middle;
+}
+
+.etiq2 {
+    width: 100%;
+}
+
+.btns {
+    padding-top: 0.5em;
+    padding-right: 0.5em;
+    text-align: right;
+}
+
+@media only screen and (max-width: 960px) {
+    * {
+        width: 100%;
+        font-size: 105%;
+    }
+    img {
+        width: 80%;
+    }
+	h2 {
+		text-align: center;
+	}
+	h3 {
+		color: blue;
+	}
+    h5 {
+        text-align: center;
+    }
+    #container {
+        width: 90%;
+    }
+    .cmps {
+        flex-direction: column;
+    }
+    .etiq {
+        width: 100%;
+        justify-content: left;
+    }
+    .campo {
+        width: 90%;
+    }
+    .btns {
+        text-align: center;
+    }
+    button {
+        margin-top: 0.5em;        
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+    .logo {
+        padding-bottom: 0.5em;
+        width: 8em;
+    }
+    img {
+        width: 80%;
+    }
+    h3 {
+        padding-bottom: 0.5em;
+    }
+    .cmps {
+        padding: 0 0 2.25em 0;
+    }
+}
+

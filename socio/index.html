@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Club de consumidores</title>
+		<link rel="stylesheet" href="socio.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img id="logo" src="../img/logoclub.png" alt="" />
+			</div>
+			<h2>Club de consumidores</h2>
+			<h5>Servicios a los socios</h5>
+			<div id="div1" align="center">
+				<h3>Autenticación</h3>
+				<div id="div0" class="cmps">
+					<span class="etiq">Correo electrónico:</span>
+					<input id="email" class="campo" type="email" size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" />
+				</div>
+				<div id="div2" class="cmps">
+					<span class="etiq">Password:</span>
+					<input id="clave" class="campo" type="password" size="50" maxlength="100" onchange="compara1()" />
+				</div>
+				<div id="div3" class="cmps">
+					<span class="etiq">Confirmar password:</span>
+					<input id="confirmacion" class="campo" type="password" size="50" maxlength="100" onchange="compara2()" />
+				</div>
+				<div id="div4" class="cmps">
+					<span class="etiq">Pregunta de seguridad:</span>
+					<input id="question" class="campo" type="text" size="50" maxlength="100" />
+				</div>
+				<div id="div5" class="cmps">
+					<span id="txtpregunta" class="etiq">Respuesta a la pregunta</span>
+					<input id="answer" class="campo" type="password" size="50" maxlength="100" />
+				</div>
+				<!-- Linea de botones -->
+				<div align="center">
+					<button id="norecuerda" onclick="pregunta()" style="width: 10em; margin: 0.5em 0 0 0;">Olvidé mi password</button>
+				</div>
+				<div class="btns">
+					<button id="buscar" onclick="buscar()" style="width: 7em;">Buscar</button>
+					<button id="login" onclick="login()" style="width: 7em;">Ingresar</button>
+					<button id="registro" onclick="registro()" style="width: 7em;">Registrar</button>
+					<button id="olvido" onclick="recuperar()" style="width: 7em;">Recuperar</button>
+					<button id="cambiapass" onclick="restablecer()" style="width: 7em;">Restablecer</button>
+					<button id="limpiar" onclick="limpiar()" style="width: 7em;">Limpiar</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			var respuesta, idsocio;
+
+			var tipo = "socio";
+
+			function inicio() {
+				clave = "";
+				confirmacion = "";
+				question = "";
+				answer = "";
+				document.getElementById("clave").value = "";
+				document.getElementById("confirmacion").value = "";
+				document.getElementById("question").value = "";
+				document.getElementById("answer").value = "";
+				document.getElementById("answer").style.background = "";
+				document.getElementById("div2").style.display = 'none';
+				document.getElementById("div3").style.display = 'none';
+				document.getElementById("div4").style.display = 'none';
+				document.getElementById("div5").style.display = 'none';
+				document.getElementById("txtpregunta").innerHTML = 'Respuesta a la pregunta';
+				document.getElementById("norecuerda").style.display = 'none';
+				document.getElementById("buscar").style.display = 'inline-block';
+				document.getElementById("login").style.display = 'none';
+				document.getElementById("registro").style.display = 'none';
+				document.getElementById("olvido").style.display = 'none';
+				document.getElementById("cambiapass").style.display = 'none';
+			}
+
+			function buscar() {
+				if (document.getElementById("email").value!="") {
+					valor = document.getElementById("email").value;
+					document.getElementById("email").disabled = true;
+					arroba = 0;
+					punto = 0;
+					posa = 0;
+					posp = 0;
+					for (index = 0; index < valor.length; index++) {
+						if (valor[index] == "@") { arroba++; posa = index; }
+						if (valor[index] == ".") { punto++; posp = index; }
+					}
+					if (arroba + punto > 1 && posp > posa) {
+						var xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function () {
+							if (this.readyState == 4 && this.status == 200) {
+								respuesta = JSON.parse(this.responseText);
+								idsocio = respuesta.id;
+								if (respuesta.exito == 'SI') {
+									document.getElementById("div2").style.display = 'flex';
+									document.getElementById("norecuerda").style.display = 'inline-block';
+									document.getElementById("buscar").style.display = 'none';
+									document.getElementById("login").style.display = 'inline-block';
+									document.getElementById("registro").style.display = 'none';
+									document.getElementById("olvido").style.display = 'none';
+								} else {
+									if (respuesta.mensaje=="error de tipo") {
+										alert("Este correo electrónico está registrado como comercio.\nUtilice otro correo electrónico o comuniquese al\n+58-424-407.1820 para solicitar el cambio de tipo.");
+									} else {
+										document.getElementById("div2").style.display = 'flex';
+										document.getElementById("div3").style.display = 'flex';
+										document.getElementById("div4").style.display = 'flex';
+										document.getElementById("div5").style.display = 'flex';
+										document.getElementById("buscar").style.display = 'none';
+										document.getElementById("login").style.display = 'none';
+										document.getElementById("registro").style.display = 'inline-block';
+										document.getElementById("olvido").style.display = 'none';
+									}
+								}
+							}
+						};
+						xmlhttp.open("GET", "../php/buscausuarios.php?email="+valor+"&tipo="+tipo, false);
+						xmlhttp.send();
+					} else {
+						document.getElementById("email").focus();
+					}
+				} else {
+					alert('El correo electrónico no se puede dejar en blanco.');
+				}
+			}
+
+			function login() {
+				usuario = document.getElementById("email").value;
+				clave = document.getElementById("clave").value.toLowerCase();
+				hashp = SHA256(usuario.trim()+clave.trim());
+				if (respuesta.hashp==hashp) {
+					console.log(idsocio);
+					sessionStorage.setItem("email", usuario);
+					sessionStorage.setItem("idsocio", idsocio);
+					window.location.replace("menu.html");
+				} else {
+					alert('no valido');
+					document.getElementById("clave").focus();
+				}
+			}
+
+			function registro() {
+				usuario = document.getElementById("email").value;
+				clave = document.getElementById("clave").value.toLowerCase();
+				confirmacion = document.getElementById("confirmacion").value;
+				if (clave==confirmacion) {
+					question = document.getElementById("question").value;
+					answer = document.getElementById("answer").value.toLowerCase();
+
+					hashp = SHA256(usuario.trim()+clave.trim());
+					hashr = SHA256(usuario.trim()+answer.trim());
+
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							if (respuesta.exito == 'SI') {
+								alert(respuesta.mensaje);
+								limpiar();
+							} else {
+								alert('Falló el registro.\nInténtelo de nuevo\nSi persiste el fallo comuniquese al +58-424-407.1820');
+								document.getElementById("clave").focus();
+							}
+						}
+					};
+					xmlhttp.open("GET", "../php/registrausuario.php?email="+usuario.trim()+"&tipo="+tipo+"&question="+question.trim()+"&hashp="+hashp.trim()+"&hashr="+hashr.trim(), false);
+					xmlhttp.send();
+				} else {
+					alert("el password no coincide")
+					document.getElementById("clave").focus();
+				}
+			}
+
+			function recuperar() {
+				usuario = document.getElementById("email").value;
+				answer = document.getElementById("answer").value.toLowerCase();
+				hashr = SHA256(usuario.trim()+answer.trim());
+				if (respuesta.hashr==hashr) {
+					clave = "";
+					confirmacion = "";
+					document.getElementById("clave").value = "";
+					document.getElementById("confirmacion").value = "";
+					document.getElementById("div2").style.display = 'flex';
+					document.getElementById("div3").style.display = 'flex';
+					document.getElementById("div4").style.display = 'none';
+					document.getElementById("div5").style.display = 'none';
+					document.getElementById("olvido").style.display = 'none';
+					document.getElementById("cambiapass").style.display = 'inline-block';
+				} else {
+					alert("La respuesta no es correcta")
+					document.getElementById("answer").focus();
+				}
+			}
+
+			function restablecer() {
+				usuario = document.getElementById("email").value;
+				clave = document.getElementById("clave").value.toLowerCase();
+				confirmacion = document.getElementById("confirmacion").value;
+				if (clave==confirmacion) {
+					hashp = SHA256(usuario.trim()+clave.trim());
+
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							if (respuesta.exito == 'SI') {
+								alert(respuesta.mensaje);
+								limpiar();
+							} else {
+								alert('Falló el proceso.\nInténtelo de nuevo\nSi persiste el fallo comuniquese al +58-424-407.1820');
+								document.getElementById("clave").focus();
+							}
+						}
+					};
+					xmlhttp.open("GET", "../php/recuperausuario.php?email="+usuario.trim()+"&hashp="+hashp.trim(), false);
+					xmlhttp.send();
+				} else {
+					alert("el password no coincide")
+					document.getElementById("clave").focus();
+				}
+			}
+
+			function compara1() {
+				clave = document.getElementById("clave").value;
+				confirmacion = document.getElementById("confirmacion").value;
+				if (confirmacion != "") {
+					if (clave == confirmacion) {
+						return true;
+					} else {
+						// alert("El password no coincide.\n"+document.getElementById("confirmacion").value+" == "+clave);
+						alert("El password no coincide.");
+						document.getElementById("clave").focus();
+					}
+				}
+			}
+
+			function compara2() {
+				clave = document.getElementById("clave").value;
+				confirmacion = document.getElementById("confirmacion").value;
+				if (clave == confirmacion) {
+					return true;
+				} else {
+					// alert("El password no coincide.\n"+document.getElementById("clave").value+" == "+confirmacion);
+					alert("El password no coincide.");
+					document.getElementById("confirmacion").focus();
+				}
+			}
+
+			function pregunta() {
+				document.getElementById("div2").style.display = 'none';
+				document.getElementById("txtpregunta").innerHTML = respuesta.pregunta;
+				document.getElementById("div5").style.display = 'flex';
+				document.getElementById("answer").style.background = "lightcoral";
+				document.getElementById("norecuerda").style.display = 'none';
+				document.getElementById("buscar").style.display = 'none';
+				document.getElementById("login").style.display = 'none';
+				document.getElementById("registro").style.display = 'none';
+				document.getElementById("olvido").style.display = 'inline-block';
+			}
+
+			// limpia el formulario
+			function limpiar() {
+				inicio();
+				document.getElementById("email").disabled = false;
+				document.getElementById("email").value = "";
+				document.getElementById("email").focus();
+			}
+		</script>
+	</body>
+</html>
