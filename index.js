@@ -26,7 +26,8 @@ function cargadatos() {
 					for (var i = 0; i < datos.registros.length; i++) {
 						lista += '<div class="item ' + datos.registros[i].categoria + '" align="center">';
 						lista += '<div class="imagen" align="center">';
-						lista += '<a id="' + datos.registros[i].id + '" href="cupones/cupon.html?id=' + datos.registros[i].id + '" onclick="sesionprov(this.id)">';
+						lista += '<a id="' + datos.registros[i].id + '" href="menu.html?id_proveedor='+datos.registros[i].id+'" onclick="comercio(this.id)">';
+						// lista += '<a id="' + datos.registros[i].id + '" href="cupones/cupon.html?id=' + datos.registros[i].id + '" onclick="sesionprov(this.id)">';
 						if (fexisteUrl(ruta + datos.registros[i].imagen)) {
 							if (datos.registros[i].imagen == "") {
 								lista += '<img class="img_comercio" src="' + ruta + 'sin_imagen.jpg' + '" title="' + datos.registros[i].nombre + '" />';
@@ -66,6 +67,8 @@ function filtrar(filtro) {
 	}
 }
 
-function sesionprov(valor) {
+function comercio(valor) {
 	sessionStorage.setItem("id_proveedor", valor);
+	console.log(sessionStorage);
+	// window.location.replace("menu.html?id_proveedor="+valor);
 }

@@ -3,6 +3,7 @@ var params;
 function cargaforma() {
 	buscatitulo();
 	var logo;
+	var limpiardatos;
 
 	params = fparamurl(window.location.search.substr(1));
 	if (params.id!=undefined) {
@@ -44,7 +45,7 @@ function cargaforma() {
 				if (campo<document.getElementsByClassName("campo").length-1) {
 					document.getElementsByClassName("etiq")[campo].innerHTML = respuesta.etiquetas[campo];
 				}
-				document.getElementsByClassName("campo")[campo].id = respuesta.campos[campo];
+				// document.getElementsByClassName("campo")[campo].id = respuesta.campos[campo];
 			}
 			document.getElementById("clavecanje").focus();
 		}
@@ -81,12 +82,22 @@ function buscausuario() {
 		if (this.readyState == 4 && this.status == 200) {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
+				// if (params.cupon!=undefined) {
+				// 	document.getElementById("cuponlargo").value = params.cupon;
+				// 	enviacupon();
+				// } else {
+				// 	canjear();
+				// }
 				if (params.cupon!=undefined) {
+					limpiardatos = false;
+					console.log(params);
+					console.log(params.cupon);
 					document.getElementById("cuponlargo").value = params.cupon;
-					enviacupon();					
+					document.getElementById("cuponlargo").disabled = true;
 				} else {
-					canjear();
+					limpiardatos = true;
 				}
+				canjear(limpiardatos);
 			} else {
 				alert(fmensaje(respuesta.mensaje));
 				limpiausuario();
@@ -97,17 +108,26 @@ function buscausuario() {
 	xmlhttp.send(datos);
 }
 
-function canjear() {
+function canjear(limpiardatos) {
 	document.getElementById("login").style.display = 'none';
 	document.getElementById("canjear").style.display = 'block';
-	limpiacupon();
+	if (limpiardatos) {
+		limpiacupon();
+	} else {
+		document.getElementById("factura").focus();
+	}
 }
 
 // Enviar los datos del formulario para procesar en el servidor
 function enviacupon() {
 	var datos = new FormData();
+	console.log(document.getElementById("cuponlargo").value);
 	datos.append("cuponlargo", document.getElementById("cuponlargo").value);
+	datos.append("factura", document.getElementById("factura").value);
+	datos.append("monto", document.getElementById("monto").value);
 	datos.append("id_proveedor", document.getElementById("id_proveedor").value);
+	console.log(datos);
+
 
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
@@ -122,7 +142,7 @@ function enviacupon() {
 			}
 		}
 	};
-	xmlhttp.open("POST", "../php/canjeacupon.php", false);
+	xmlhttp.open("POST", "../php/canjeacupon.php", true);
 	xmlhttp.send(datos);
 }
 

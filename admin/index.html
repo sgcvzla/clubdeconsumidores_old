@@ -6,19 +6,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
 		<title>SGC Consultores C.A.</title>
-		<link rel="stylesheet" href="admin.css">
+		<link rel="stylesheet" href="css/styles.css">
 		<script type="text/javascript" src="js/funciones.js"></script>
 		<script type="text/javascript" src="index.js"></script>
 	</head>
 	<body onload='cargadatos()'>
 		<div id="container">
+			<h2>Club de consumidores</h2>
+			<h5>Servcios a los socios</h5>
 			<h3 id="tituloformulario" align="center">SELECCIÓN DEL COMERCIO</h3>
 			<br/>
 			<div id="cintafiltros" class="filtros" style="text-align:center;">
 				<div id="categoria">Escoja la categoría del comercio: </div>
 				<div id="listafiltros">
-					<select id="opciones_filtros" onchange="filtrar(this)">
-						<option value="TODAS">TODAS</option>
+					<select id="opciones_filtros" onchange="filtrar(this)" style="width:auto;">
+						<option value="Todas">Todas</option>
 					</select>
 				</div>
 				<br />

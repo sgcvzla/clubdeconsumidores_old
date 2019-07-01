@@ -3,11 +3,11 @@ include_once("../_config/conexion.php");
 include_once("funciones.php");
 
 $tabla = 'cupones';
-$fecha = date("Y")."-".date("m")."-".sprintf("%'02d",(date("d")-1));
+// $fecha = date("Y")."-".date("m")."-".sprintf("%'02d",(date("d")-1));
 
-// $fech1 = date('Y-m-d');
-// $fech2 = strtotime('-3 day', strtotime ($fech1));
-// $fech2 = date ('Y-m-d', $fech2);
+$fech1 = date('Y-m-d');
+$fecha = strtotime('-1 day', strtotime ($fech1));
+$fecha = date ('Y-m-d', $fecha);
 
 // $fech3 = strtotime('-5 day', strtotime ($fech1));
 // $fech3 = date ('Y-m-d', $fech3);
@@ -57,8 +57,8 @@ $texto .= '</table>';
 
 echo $texto;
 
-$asunto = "Transacciones del dia: ".substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+// $asunto = "Transacciones del dia: ".substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
 $mensaje = $texto;
 $cabeceras = 'Content-type: text/html;';
-mail("soluciones2000@gmail.com",$asunto,$mensaje,$cabeceras);
+// mail("soluciones2000@gmail.com",$asunto,$mensaje,$cabeceras);
 ?>

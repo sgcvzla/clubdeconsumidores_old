@@ -2,12 +2,16 @@
     "titulo":"Canje de cupones",
     "etiquetas": [
         "Clave de acceso",
-        "Código de cupon"
+        "Código de cupon",
+        "Número de factura",
+        "Monto de la compra"
     ],
     "campos": [
         "clavecanje",
         "id_proveedor",
-        "cuponlargo"
+        "cuponlargo",
+        "factura",
+        "monto"
     ],
     "mensajes": {
         "claveincorrecta": ["Clave de acceso incorrecta, intente nuevamente.","Si no conoce su clave comuniquese al +584244071820"],

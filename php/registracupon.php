@@ -8,20 +8,26 @@ $archivojson = "../cupones/cupon.json";
 
 // Si no es socio, verificar si se quiere afiliar o no
 $socio = ($_POST["socio"]=="true") ? 1 : 0 ;
+// $socio = 1;
+// $email = 'soluciones3000@gmail.com';
 
 // Buscar datos de socio
 $query = "select * from socios where email='".$_POST['email']."'";
+// $query = "select * from socios where email='".$email."'";
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$id=$row["id"];
 } else {
 	if ($socio) {
-		$query = "INSERT INTO socios (email,telefono,nombres,apellidos) VALUES ('".$_POST["email"]."','".$_POST["telefono"]."','".$_POST["nombres"]."','".$_POST["apellidos"]."')";
+		$query = "INSERT INTO socios (email,telefono,nombres,apellidos,status) VALUES ('".$_POST["email"]."','".$_POST["telefono"]."','".$_POST["nombres"]."','".$_POST["apellidos"]."','Pendiente')";
+		// $query = "INSERT INTO socios (email,telefono,nombres,apellidos) VALUES ('".$email."','0414','xxx','yyy')";
 		$result = mysqli_query($link,$query);
 		$query = "select * from socios where email='".$_POST['email']."'";
+		// $query = "select * from socios where email='".$email."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
 			$id=$row["id"];
+			mensajebienvenida($row);
 		} else {
 			$id=0;
 		}
@@ -39,7 +45,7 @@ if ($row = mysqli_fetch_array($result)) {
 }
 
 // Buscar premio activo
-$query = "select * from premios where id_proveedor=".$_POST['id_proveedor'] . " and activo=1";
+$query = "select * from premios where id_proveedor=".$_POST['id_proveedor'] . " and clasepremio='consumo' and activo=1";
 // $query = "select * from premios where id_proveedor=1 and activo=1";
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
@@ -63,8 +69,10 @@ if ($row = mysqli_fetch_array($result)) {
 	}
 }
 
+
 // Verificar si ya existe el cupón, si existe responder, si no, agregar y responder 
 $query = "select * from cupones where id_proveedor=".$_POST['id_proveedor']." and factura='" . $_POST['factura'] . "'";
+// $query = "select * from cupones where id_proveedor=1 and factura='8888888'";
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$respuesta = '{"exito":"NO","mensaje":'. mensajes($archivojson,"cuponyaregistrado") .',"cupon":"0"}';
@@ -75,8 +83,21 @@ if ($row = mysqli_fetch_array($result)) {
 	$fechavencimiento = date ('Y-m-d' , $fechavencimiento);
 	$fechavencstr = substr($fechavencimiento,8,2).'/'.substr($fechavencimiento,5,2).'/'.substr($fechavencimiento,0,4);
 
-	$query = "INSERT INTO cupones (cupon,cuponlargo,id_proveedor,id_socio,status,factura,monto,id_premio,tipopremio,montopremio,descpremio,socio,email,telefono,nombres,apellidos,fechacupon,fechavencimiento) VALUES ('".$numcupon."','".$cuponlargo."'," . $_POST['id_proveedor'] . "," . $id . ",'Generado','" . $_POST["factura"] . "'," . $_POST["monto"] . ",".$id_premio.",'".$tipopremio."',".$montopremio.",'".$descpremio."'," . $socio . ",'" . $_POST["email"] . "','" . $_POST["telefono"] . "','" . $_POST["nombres"] . "','" . $_POST["apellidos"] . "','".$fechacupon."','".$fechavencimiento."')";
+	/*
+	Hash para insertar en el blockchain
+	-----------------------------------
+	El hash se va a armar con los siguientes datos:
+	- Cupon
+	- Proveedor
+	- Socio
+	- Tipo premio
+	- Monto premio
+	- Descripción premio
+	- Status cupón
+	*/
+	$hash = hash("sha256",$numcupon.$_POST['id_proveedor']. $id.$tipopremio.$montopremio.$descpremio."Generado");
 
+	$query = "INSERT INTO cupones (cupon,cuponlargo,id_proveedor,id_socio,status,factura,monto,id_premio,tipopremio,montopremio,descpremio,socio,email,telefono,nombres,apellidos,fechacupon,fechavencimiento,hash) VALUES ('".$numcupon."','".$cuponlargo."'," . $_POST['id_proveedor'] . "," . $id . ",'Generado','" . $_POST["factura"] . "'," . $_POST["monto"] . ",".$id_premio.",'".$tipopremio."',".$montopremio.",'".$descpremio."'," . $socio . ",'" . $_POST["email"] . "','" . $_POST["telefono"] . "','" . $_POST["nombres"] . "','" . $_POST["apellidos"] . "','".$fechacupon."','".$fechavencimiento."','".$hash."')";
 	if ($result = mysqli_query($link, $query)) {
 
 		$correo = $_POST["email"];
@@ -138,6 +159,7 @@ if ($row = mysqli_fetch_array($result)) {
 			$mensaje .= '<img src="'.$ruta.$dir.$numcupon.'.png" height="200" width="200" />';
 		$mensaje .= '</p>';
 		// Hasta aqui
+		$mensaje .= '<p style="text-align:center;">'.$hash.'</p>';
 
 		$mensaje .= utf8_decode('¡Te esperamos!'.'<br/><br/>');
 
@@ -170,77 +192,101 @@ if ($row = mysqli_fetch_array($result)) {
 echo $respuesta;
 
 
-function asignacodigo($ultcupon){
-	$valores = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$a = strlen($valores)-1;
-	$base = 36;
-	$codigo = '';
-	$arriba = 1;
-	$newcodigo = '';
-	$numero = $ultcupon;
-	// echo $numero.'<br>';
-	for ($i=strlen($ultcupon)-1 ; $i>=0 ; $i--) { 
-		$pos = strpos($valores, substr($numero,$i,1));
-		if ($arriba==1) {
-			if ($pos==$a) {
-				$codigo = substr($valores,0,1);
-			} else {
-				$codigo = substr($valores,$pos+1,1);
-				$arriba = 0;
-			}
-		} else {
-			$codigo = substr($numero,$i,1);
-		}
-		$newcodigo = $codigo.$newcodigo;
-	}
-	// switch (strlen($newcodigo)) {
-	// 	case '1':
-	// 		$newcodigo = '0000'.$newcodigo;
-	// 		break;
-	// 	case '2':
-	// 		$newcodigo = '000'.$newcodigo;
-	// 		break;
-	// 	case '3':
-	// 		$newcodigo = '00'.$newcodigo;
-	// 		break;
-	// 	case '4':
-	// 		$newcodigo = '0'.$newcodigo;
-	// 		break;
-	// }
-	for ($i=0 ; $i< strlen($newcodigo); $i++) { 
-		// echo substr($newcodigo,$i,1).'<br>';
-	}
+// function asignacodigo($ultcupon){
+// 	$valores = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+// 	$a = strlen($valores)-1;
+// 	$base = 36;
+// 	$codigo = '';
+// 	$arriba = 1;
+// 	$newcodigo = '';
+// 	$numero = $ultcupon;
+// 	// echo $numero.'<br>';
+// 	for ($i=strlen($ultcupon)-1 ; $i>=0 ; $i--) { 
+// 		$pos = strpos($valores, substr($numero,$i,1));
+// 		if ($arriba==1) {
+// 			if ($pos==$a) {
+// 				$codigo = substr($valores,0,1);
+// 			} else {
+// 				$codigo = substr($valores,$pos+1,1);
+// 				$arriba = 0;
+// 			}
+// 		} else {
+// 			$codigo = substr($numero,$i,1);
+// 		}
+// 		$newcodigo = $codigo.$newcodigo;
+// 	}
+// 	// switch (strlen($newcodigo)) {
+// 	// 	case '1':
+// 	// 		$newcodigo = '0000'.$newcodigo;
+// 	// 		break;
+// 	// 	case '2':
+// 	// 		$newcodigo = '000'.$newcodigo;
+// 	// 		break;
+// 	// 	case '3':
+// 	// 		$newcodigo = '00'.$newcodigo;
+// 	// 		break;
+// 	// 	case '4':
+// 	// 		$newcodigo = '0'.$newcodigo;
+// 	// 		break;
+// 	// }
+// 	for ($i=0 ; $i< strlen($newcodigo); $i++) { 
+// 		// echo substr($newcodigo,$i,1).'<br>';
+// 	}
 
-	return $newcodigo;
-}
+// 	return $newcodigo;
+// }
 
-function asignacodigolargo($ultcupon){
-	$newcodigo = $ultcupon;
+// function asignacodigolargo($ultcupon){
+// 	$newcodigo = $ultcupon;
 
-	$cuponlargo = substr($newcodigo,0,2);
-	$cuponlargo .= codigocaracter(strtoupper(substr($_POST["email"],-1)));
-	$cuponlargo .= substr($newcodigo,2,2);
-	$cuponlargo .= codigocaracter(strtoupper(substr($_POST["nombres"],-1)));
-	$cuponlargo .= substr($newcodigo,4,2);
-	$cuponlargo .= codigocaracter(strtoupper(substr($_POST["apellidos"],-1)));
-	$cuponlargo .= substr($newcodigo,6,2);
-	$cuponlargo .= codigocaracter(strtoupper(substr($_POST["telefono"],-1)));
-	$cuponlargo .= substr($newcodigo,8,2);
+// 	$cuponlargo = substr($newcodigo,0,2);
+// 	// $cuponlargo .= codigocaracter(strtoupper(substr($_POST["email"],-1)));
+// 	$cuponlargo .= substr($newcodigo,2,2);
+// 	// $cuponlargo .= codigocaracter(strtoupper(substr($_POST["nombres"],-1)));
+// 	$cuponlargo .= substr($newcodigo,4,2);
+// 	// $cuponlargo .= codigocaracter(strtoupper(substr($_POST["apellidos"],-1)));
+// 	$cuponlargo .= substr($newcodigo,6,2);
+// 	// $cuponlargo .= codigocaracter(strtoupper(substr($_POST["telefono"],-1)));
+// 	$cuponlargo .= substr($newcodigo,8,2);
 
-	return $cuponlargo;
-}
+// 	return $cuponlargo;
+// }
 
-function codigocaracter($valor) {
-	$llaves = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+// function codigocaracter($valor) {
+// 	$llaves = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-	$codigos =  '111213141A1B1C1D212223242A2B2C2D3132';
-	$codigos .= '33343A3B3C3D414243444A4B4C4DA1A2A3A4';
+// 	$codigos =  '111213141A1B1C1D212223242A2B2C2D3132';
+// 	$codigos .= '33343A3B3C3D414243444A4B4C4DA1A2A3A4';
 
-	$posicion = strpos($llaves, $valor);
-	$pos2 = $posicion*2;
-	$newvalor = substr($codigos,$pos2,2);
+// 	$posicion = strpos($llaves, $valor);
+// 	$pos2 = $posicion*2;
+// 	$newvalor = substr($codigos,$pos2,2);
 
-	return $newvalor;
+// 	return $newvalor;
+// }
+
+function mensajebienvenida($reg) {
+	$correo = $reg["email"];
+
+	$mensaje = utf8_decode('Hola '.trim($reg["nombres"]).',<br/><br/>');
+	$mensaje .= utf8_decode('¡Gracias por querer formar parte de nuestro club!<br/><br/>');
+
+	$mensaje .= utf8_decode('Queremos conocerte un poco más y ofrecerte premios, promociones o productos/servicios especialmente diseñados para ti, pero necesitamos que nos brindes alguna información que nos ayudará a prestarte un mejor servicio, innovar en nuestros premios y hacerte la vida mucho más fácil y gratificante, además desde ya comenzaras a ganar, luego de completar <a href="https://www.clubdeconsumidores.com.ve/registro/registro.html?idp='.$_POST['id_proveedor'].'&ids='.$reg["id"].'">este formulario</a> recibirás un premio de bienvenida.<br/><br/>');
+
+	$mensaje .= utf8_decode('<b>Te garantizamos que tu información será guardada celosamente y nunca será compartida con ningún tercero sin tu consentimiento y te aseguramos que siempre cumpliremos con las Leyes vigentes en lo relacionado al tratamiento de tus datos personales.</b><br/><br/>');
+
+	$mensaje .= utf8_decode('Nuestro club está en permanente evolución y tú como un miembro muy importante puedes aportarnos ideas o sugerencias que harán crecer esta comunidad, ten la certeza que serás escuchado(a) y tus sugerencias o comentarios serán repondidos en un lapso de tiempo razonable con mucho entusiasmo por resolver tus inquietudes, para nosotros será un placer atenderte por medio del email: <a href="mailto:info@clubdeconsumidores.com.ve">info@clubdeconsumidores.com.ve</a>.<br/><br/>');
+
+	$mensaje .= utf8_decode('Bienvenido!!!'.'<br/><br/>');
+	$mensaje .= utf8_decode('Club de consumidores'.'<br/><br/>');
+
+	$mensaje .= utf8_decode('<b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@clubdeconsumidores.com.ve">info@clubdeconsumidores.com.ve</a></b>'.'<br/><br/>');
+
+	$asunto = utf8_decode(trim($reg["nombres"]).', Bienvenido a tu club de consumidores!!!');
+	$cabeceras = 'Content-type: text/html;';
+//	if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
+		mail($correo,$asunto,$mensaje,$cabeceras);
+//	}
 }
 
 ?>
