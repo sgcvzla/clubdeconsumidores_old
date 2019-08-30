@@ -7,9 +7,14 @@ function cargaforma() {
 	var logo;
 
 	var params = fparamurl(window.location.search.substr(1));
+	var prov;
 
-	sessionStorage.setItem("id_proveedor",params.id);
-	var prov = sessionStorage.getItem("id_proveedor");
+	if (params==undefined) {
+		prov = sessionStorage.getItem("id_proveedor");
+	} else {
+		prov = params.id;
+		sessionStorage.setItem("id_proveedor",params.id);
+	}
 
 	var titulo = sessionStorage.getItem("nombresistema");
 	// cargar parámetros de la tabla
@@ -104,7 +109,7 @@ function enviar() {
 			console.log(this.responseText);
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
-				alert(fmensaje(respuesta.mensaje));
+				alert(fmensaje(respuesta.mensaje)+"\n# de cupón: "+respuesta.cuponlargo);
 				limpiar();
 			} else {
 				alert(fmensaje(respuesta.mensaje));

@@ -9,10 +9,11 @@
 		<link rel="stylesheet" href="menu.css">
 		<script type="text/javascript" src="js/funciones.js"></script>
 	</head>
-	<body>
+	<body onload="generalink()">
 		<div id="container">
 			<div class="logo" align="center">
-				<img class="img-logo" id="logo" src="img/logoclub.png" alt="">
+				<!-- <img class="img-logo" id="logo" src="img/logoclub.png" alt=""> -->
+				<img class="img-logo" id="logo" src="" alt="">
 			</div>
 			<h2 style="text-align: center; color: black;">Club de consumidores</h2>
 			<h5 style="text-align: center; color: black;">Servicios a los socios</h5>
@@ -20,30 +21,58 @@
 				<h3>Menú principal</h3>
 				<br/>
 				<div id="comercios" class="catalogo">
-					<div class="item" align="center">
-						<div class="imagen" align="center">
-							<a id="lector" href="" onclick="canjear()">
+					<a id="cupon" href="" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
 								<!-- <img class="img_opcion" src="" title="Lector" /> -->
-								Canjear cupones
-							</a>
+								Generar cupón
+							</div>
 						</div>
-					</div>
-					<div class="item" align="center">
-						<div class="imagen" align="center">
-							<a id="cuponera" href="" onclick="alert('En Construcción')">
+					</a>
+					<a id="catalogo" href="" onclick="alert('En Construcción')">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
 								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-								Catálogo
-							</a>
+								Catálogo para<br/>compra en linea
+							</div>
 						</div>
-					</div>
+					</a>
 				</div>
 			</div>
 		</div>
 		<script>
+			function generalink() {
+				idp = sessionStorage.getItem("id_proveedor");
+				document.getElementById("cupon").href = "./cupones/cupon.html?id="+idp;
+				// cargar parámetros de la tabla
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito == 'SI') {
+							// document.title = 'Menú principal';
+							logo = respuesta.proveedor.logo;
+							if (logo!="") {
+								document.getElementById("logo").src = "./img/" + logo;
+							} else {
+								document.getElementById("logo").src = "./img/" + 'sin_imagen.jpg';
+							}
+							document.getElementById("logo").title = respuesta.proveedor.nombre;
+						}
+					}
+				};
+				xmlhttp.open("GET", "./php/proveedores.php?prov=" + idp, false);
+				xmlhttp.send();
+				console.log(idp);
+				console.log(document.getElementById("cupon"));
+				// window.location.replace("./cupones/cupon.html?id="+idp);
+			}
+
 			function canjear() {
 				idp = sessionStorage.getItem("id_proveedor");
 				console.log(idp);
-				alert(idp);
+				console.log("./cupones/cupon.html?id="+idp);
+				// window.location.replace("./cupones/cupon.html?id="+idp);
 			}
 		</script>
 	</body>

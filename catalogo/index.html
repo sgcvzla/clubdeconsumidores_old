@@ -5,40 +5,120 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
-		<title>Club de consumidores</title>
+		<title>Catálogo de productos y/o servicios</title>
 		<link rel="stylesheet" href="catalogo.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
+		<script src="catalogo.js"></script>
 	</head>
-	<body>
+	<body onload="cargadatos()">
 		<div id="container">
 			<div class="logo" align="center">
 				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
 			</div>
 			<h2 style="text-align: center; color: black;">Club de consumidores</h2>
 			<h5 style="text-align: center; color: black;">Servicios a los socios</h5>
+<!-- Desde aqui -->
+<div class="container">
+	<div class="menu">
+		<div id="atras" class="anterior">
+			<a href="" id="btn_ctlg" style="display:none;" onclick="muestracatalogo(event)">Volver al catálogo</a>
+		</div>
+		<div id="encabezado" class="titulo">
 			<h3>Catálogo de productos y/o servicios</h3>
-			<div id="div1" align="center">
-				<br/>
-				<div id="comercios" class="catalogo">
-					<div class="item" align="center">
-						<div class="imagen" align="center">
-							<a id="lector" href="" onclick="canjear()">
-								<!-- <img class="img_opcion" src="" title="Lector" /> -->
-								Canjear cupones
-							</a>
-						</div>
-					</div>
-					<div class="item" align="center">
-						<div class="imagen" align="center">
-							<a id="cuponera" href="" onclick="alert('En Construcción')">
-								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-								Catálogo
-							</a>
-						</div>
-					</div>
+		</div>
+		<div id="adelante" class="proximo">
+			<div id="items_orden" style="display:none;">
+				Items en la orden <span id="cantidad"></span>
+			</div>
+ 			<div>
+ 				<a href="" id="btn_orden" style="display:none;" onclick="muestraorden(event)">Ver orden</a>
+ 				<a href="" id="btn_online" style="display:none;" onclick="Abrir_ventana(event)">Enviar orden y pagar en linea</a>
+ 				<a href="" id="btn_cnfrm" style="display:none;" onclick="confirmaorden(event)">Enviar orden y pagar después</a>
+ 			</div>
+		</div>
+	</div>
+	<div id="cintafiltros" class="filtros" style="text-align:center;">
+		<div>Escoja la familia de productos: </div>
+		<div id="listafiltros">
+			<select id="opciones_filtros" onchange="filtrar(this)">
+				<option value="TODAS">TODAS</option>
+			</select>
+		</div>
+	</div>
+	<div id="productos" class="catalogo">
+	</div>
+	<!-- A partir de acá es la órden que se muestra -->
+	<div class="orden">
+		<div id="cabeceraorden" class="cabecera_orden" style="display:none;">
+		<!-- <div id="cabeceraorden" class="cabecera_orden"> -->
+			<div class="fila">
+				<div class="col1 titulo-ctr"><b>Producto</b></div>
+				<div class="col2 titulo-izq"><b>Descripción</b></div>
+				<div class="col3 titulo-der"><b>Precio</b></div>
+				<div class="col4 titulo-ctr"><b>Cantidad</b></div>
+				<div class="col5 titulo-der"><b>A pagar</b></div>
+			</div>
+	 	</div>
+
+		<div id="cuerpoorden" class="cuerpo_orden" style="display:none;"></div>
+		<!-- <div id="cuerpoorden" class="cuerpo_orden"></div> -->
+
+		<div id="pieorden" class="pie_orden" style="display:none;">
+		<!-- <div id="pieorden" class="pie_orden"> -->
+			<div id="mensaje_orden" class="pieorden-izquierda"></div>
+			<div class="pieorden-derecha">
+				<div class="filapie">
+					<div class="pieorden-mensaje"><b>SUBTOTAL</b></div>
+					<div id="piesbt" class="col5_pie"></div>
+				</div>
+				<div class="filapie">
+					<div class="pieorden-mensaje"><b>I.V.A. <span id="tasa_iva1"></span>%</b></div>
+					<div id="pieiva" class="col5_pie"></div>
+				</div>
+				<div class="filapie">
+					<div class="pieorden-mensaje"><b>TOTAL GENERAL</b></div>
+					<div id="pietot" class="col5_pie"></div>
 				</div>
 			</div>
-		</div>
+	 	</div>
+ 	</div>
+	<!-- <div id="ordenconfirmada" class="orden"> -->
+	<!-- A partir de acá se muestra la órden confirmada -->
+	<div id="ordenconfirmada" class="orden" style="display:none;">
+		<h3 id="mensajeconfirmacion" style="text-align:center;color:red;height: 3em;vertical-align: middle;"></h3>
+		<div id="cabeceraconforden" class="cabecera_orden">
+			<div class="fila">
+				<div class="col1 titulo-ctr"><b>Producto</b></div>
+				<div class="col2 titulo-izq"><b>Descripción</b></div>
+				<div class="col3 titulo-der"><b>Precio</b></div>
+				<div class="col4 titulo-ctr"><b>Cantidad</b></div>
+				<div class="col5 titulo-der"><b>A pagar</b></div>
+			</div>
+	 	</div>
+
+		<div id="cuerpoconforden" class="cuerpo_orden"></div>
+
+		<div id="pieconforden" class="pie_orden">
+			<div id="mensaje_orden_conf" class="pieorden-izquierda"></div>
+			<div class="pieorden-derecha">
+				<div class="filapie">
+					<div class="pieorden-mensaje"><b>SUBTOTAL</b></div>
+					<div id="piesbtcnf" class="col5_pie"></div>
+				</div>
+				<div class="filapie">
+					<div class="pieorden-mensaje"><b>I.V.A. <span id="tasa_iva2"></span>%</b></div>
+					<div id="pieivacnf" class="col5_pie"></div>
+				</div>
+				<div class="filapie">
+					<div class="pieorden-mensaje"><b>TOTAL GENERAL</b></div>
+					<div id="pietotcnf" class="col5_pie"></div>
+				</div>
+			</div>
+	 	</div>
+ 	</div>
+</div>
+<!-- Hasta aqui -->
+
 		<script>
 			function canjear() {
 				idp = sessionStorage.getItem("id_proveedor");

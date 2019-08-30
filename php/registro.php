@@ -4,6 +4,18 @@ include_once("../_config/conexion.php");
 include_once("funciones.php");
 include_once("../lib/phpqrcode/qrlib.php");
 
+$query = 'select * from paises where id='.$_POST['pais'].';';
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) { $nombre_pais=$row["pais"]; } else { $nombre_pais=""; }
+
+$query = 'select * from estados where id='.$_POST['estado'].';';
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) { $nombre_estado=$row["estado"]; } else { $nombre_estado=""; }
+
+$query = 'select * from ciudades where id='.$_POST['ciudad'].';';
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) { $nombre_ciudad=$row["ciudad"]; } else { $nombre_ciudad=""; }
+
 $archivojson = "../registro/registro.json";
 $socio = 1;
 
@@ -37,7 +49,7 @@ if ($status=="Pendiente") {
 			}
 		} 
 	}
-	$query .= ',fecha_afiliacion="'.date('Y-m-d').'" where id='.$_POST['id_socio'].';';
+	$query .= ',nombre_pais="'.$nombre_pais.'",nombre_estado="'.$nombre_estado.'",nombre_ciudad="'.$nombre_ciudad.'",fecha_afiliacion="'.date('Y-m-d').'" where id='.$_POST['id_socio'].';';
 	// echo $query;
 	if ($result = mysqli_query($link, $query)) {
 		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistro") . '}';
@@ -200,7 +212,7 @@ function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$ar
 			$asunto = utf8_decode('Hola '.trim($nombres).', recibe este obsequio de bienvenida al club de consumidores.');
 			$cabeceras = 'Content-type: text/html;';
 	//		if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
-				mail($correo,$asunto,$mensaje,$cabeceras);
+				// mail($correo,$asunto,$mensaje,$cabeceras);
 	//		}
 
 			$a = fopen('log.html','w+');

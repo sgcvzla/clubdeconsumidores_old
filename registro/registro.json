@@ -32,7 +32,9 @@
         "Hijos menores de 5 años",
         "Hijos entre 5 y 10 años",
         "Hijos entre 11 y 20 años",
-        "Hijos mayores de 20 años"
+        "Hijos mayores de 20 años",
+        "Donde entregar",
+        "Dirección para entregas"
     ],
     "campos": [
         {"nombre":"fechanacimiento","tipo":"date"},
@@ -67,6 +69,8 @@
         {"nombre":"menores10","tipo":"number"},
         {"nombre":"menores20","tipo":"number"},
         {"nombre":"mayores","tipo":"number"},
+        {"nombre":"donde_entregar","tipo":"string"},
+        {"nombre":"direccion_entrega","tipo":"string"},
         {"nombre":"id_proveedor","tipo":"number"},
         {"nombre":"id_socio","tipo":"number"}
     ],

@@ -39,6 +39,7 @@ function cargaforma() {
 			respuesta = JSON.parse(this.responseText);
 			modulo = respuesta.titulo;
 			document.title = document.title + ' - ' + modulo;
+			console.log(respuesta);
 			for (campo = 0; campo < document.getElementsByClassName("campo").length; campo++) {
 				if (campo<document.getElementsByClassName("campo").length-2) {
 					document.getElementsByClassName("etiq")[campo].innerHTML = respuesta.etiquetas[campo];

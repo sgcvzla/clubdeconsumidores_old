@@ -46,7 +46,6 @@
                     window.location.replace(result.code);
                 }
             };
-            // var lector = new WebCodeCamJS("canvas").buildSelectMenu("#camera-select", "environment|back").init(arg).play();
             var lector = new WebCodeCamJS("canvas").buildSelectMenu("#camera-select", "environment|back").init(arg).play();
             lector.getOptimalZoom();
             document.querySelector("#camera-select").addEventListener("change", function() {
@@ -55,30 +54,38 @@
                 }
             });
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-            // navigator.mediaDevices.enumerateDevices().then(devices => {
-            //     let sourceId = null;
-            //     // enumerate all devices
-            //     for (var device of devices) {
-            //         // if there is still no video input, or if this is the rear camera
-            //         if (device.kind == 'videoinput' &&
-            //             (!sourceId || device.label.indexOf('back') !== -1)) {
-            //             sourceId = device.deviceId;
-            //         }
-            //     }
-            //     // we didn't find any video input
-            //     if (!sourceId) {
-            //         throw 'No hay cámara trasera';
-            //     }
-            //     let constraints = {
-            //         video: {
-            //             sourceId: sourceId
-            //         }
-            //     };
-            //     navigator.mediaDevices.getUserMedia(constraints);
-            //     // navigator.mediaDevices.getUserMedia(constraints).then(handleStream);
-            // });
+			var x;
+            navigator.mediaDevices.enumerateDevices().then(devices => {
+                let sourceId = null;
+                // enumerate all devices
+                for (var device of devices) {
+                    // if there is still no video input, or if this is the rear camera
+                    if (device.kind == 'videoinput' &&
+                        (!sourceId || device.label.indexOf('back') !== -1)) {
+                        sourceId = device.deviceId;
+            				console.log(sourceId)
+            				console.log(device.label)
+            				x = device.kind
+            				console.log(x)
+                    }
+                }
+                // // we didn't find any video input
+                // if (!sourceId) {
+                //     throw 'No hay cámara trasera';
+                // }
+                // let constraints = {
+                //     video: {
+                //         sourceId: sourceId
+                //     }
+                // };
+                // navigator.mediaDevices.getUserMedia(constraints);
+                // // navigator.mediaDevices.getUserMedia(constraints).then(handleStream);
+            });
 ////////////////////////////////////////////////////////////////////////////////////////////////////
             var a = window.navigator.mediaDevices.enumerateDevices();
+            // var b = window.navigator.mediaDevices;
+			// console.log(a);
+			// console.log(a.then(console.log(a[3].InputDeviceInfo.deviceId)));
 
             function botonpulsado() {
                 if (pulsado) { 

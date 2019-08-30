@@ -3,9 +3,17 @@
 header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 
+$query = "SELECT * from socios where id=".$_GET["idsocio"];
+$result = mysqli_query($link, $query);
+$respuesta = '{"socio":';
+if ($row = mysqli_fetch_array($result)) {
+	$respuesta .= '"'.trim($row["nombres"]).' '.trim($row["apellidos"]).'"';
+}
+$respuesta .= ',';
+
 $query = "SELECT distinct proveedores.id,proveedores.nombre from cupones left outer join proveedores on cupones.id_proveedor=proveedores.id where cupones.status='Generado' and cupones.id_socio=".$_GET["idsocio"]." order by nombre";
 $result = mysqli_query($link, $query);
-$respuesta = '{"proveedores":[';
+$respuesta .= '"proveedores":[';
 $first = true;
 while ($row = mysqli_fetch_array($result)) {
 	if ($first) {

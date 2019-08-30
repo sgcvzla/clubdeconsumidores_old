@@ -7,7 +7,8 @@ include_once("../lib/phpqrcode/qrlib.php");
 $archivojson = "../cupones/cupon.json";
 
 // Si no es socio, verificar si se quiere afiliar o no
-$socio = ($_POST["socio"]=="true") ? 1 : 0 ;
+$nuevosocio = ($_POST["socio"]=="true") ? 1 : 0 ;
+$socio = 0;
 // $socio = 1;
 // $email = 'soluciones3000@gmail.com';
 
@@ -17,8 +18,9 @@ $query = "select * from socios where email='".$_POST['email']."'";
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$id=$row["id"];
+	$socio = 1;
 } else {
-	if ($socio) {
+	if ($nuevosocio) {
 		$query = "INSERT INTO socios (email,telefono,nombres,apellidos,status) VALUES ('".$_POST["email"]."','".$_POST["telefono"]."','".$_POST["nombres"]."','".$_POST["apellidos"]."','Pendiente')";
 		// $query = "INSERT INTO socios (email,telefono,nombres,apellidos) VALUES ('".$email."','0414','xxx','yyy')";
 		$result = mysqli_query($link,$query);
@@ -27,6 +29,7 @@ if ($row = mysqli_fetch_array($result)) {
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
 			$id=$row["id"];
+			$socio = 1;
 			mensajebienvenida($row);
 		} else {
 			$id=0;
@@ -75,7 +78,7 @@ $query = "select * from cupones where id_proveedor=".$_POST['id_proveedor']." an
 // $query = "select * from cupones where id_proveedor=1 and factura='8888888'";
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
-	$respuesta = '{"exito":"NO","mensaje":'. mensajes($archivojson,"cuponyaregistrado") .',"cupon":"0"}';
+	$respuesta = '{"exito":"NO","mensaje":'. mensajes($archivojson,"cuponyaregistrado") .',"cupon":"0","cuponlargo":"0"}';
 } else {
 
 	$fechacupon = date ('Y-m-d');
@@ -173,7 +176,7 @@ if ($row = mysqli_fetch_array($result)) {
 		$asunto = utf8_decode(trim($_POST["nombres"]).' ganaste un premio en '.($nombreproveedor).' por tu compra.');
 		$cabeceras = 'Content-type: text/html;';
 //		if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
-			mail($correo,$asunto,$mensaje,$cabeceras);
+			// mail($correo,$asunto,$mensaje,$cabeceras);
 //		}
 
 		$a = fopen('log.html','w+');
@@ -181,12 +184,12 @@ if ($row = mysqli_fetch_array($result)) {
 		fwrite($a,'-');
 		fwrite($a,$mensaje);
 
-		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocupon") . ',"cupon":"'.$numcupon.'"}';
+		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocupon") . ',"cupon":"'.$numcupon.'","cuponlargo":"'.$cuponlargo.'"}';
 //		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocupon") . ',"cupon":"'.$numcupon.'",';
 //		$respuesta .= '"contenido":'.$contenido.',"filename":"'.$filename.'"}';
 
 	} else {
-		$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"fallaregistrocupon") . ',"cupon":"0"}';
+		$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"fallaregistrocupon") . ',"cupon":"0","cuponlargo":"0"}';
 	}
 }
 echo $respuesta;
@@ -285,7 +288,7 @@ function mensajebienvenida($reg) {
 	$asunto = utf8_decode(trim($reg["nombres"]).', Bienvenido a tu club de consumidores!!!');
 	$cabeceras = 'Content-type: text/html;';
 //	if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
-		mail($correo,$asunto,$mensaje,$cabeceras);
+		// mail($correo,$asunto,$mensaje,$cabeceras);
 //	}
 }
 

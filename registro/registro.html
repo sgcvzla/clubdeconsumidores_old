@@ -59,7 +59,7 @@
 			<span class="etiq"></span>
 			<select id="" class="campo" style="width:11.5em;">
 				<!-- <option value="nodefinido">Seleccione una opción</option> -->
-				<option value="Venezuela">Venezuela</option>
+				<option value="192">Venezuela</option>
 			</select>
 		</div>
 		<!-- estado -->
@@ -67,8 +67,8 @@
 			<span class="etiq"></span>
 			<select id="" class="campo" style="width:11.5em;">
 				<!-- <option value="nodefinido">Seleccione una opción</option> -->
-				<option value="Carabobo">Carabobo</option>
-				<option value="Aragua">Aragua</option>
+				<option value="7">Carabobo</option>
+				<option value="4">Aragua</option>
 			</select>
 		</div>
 		<!-- ciudad -->
@@ -76,20 +76,29 @@
 			<span class="etiq"></span>
 			<select id="" class="campo" style="width:11.5em;">
 				<!-- <option value="nodefinido">Seleccione una opción</option> -->
-				<option value="Valencia">Valencia</option>
-				<option value="Naguanagua">Naguanagua</option>
-				<option value="Maracay">Maracay</option>
+				<option value="68">Valencia</option>
+				<option value="40">Maracay</option>
+				<option value="76">Canoabo</option>
+				<option value="27">Guacara</option>
+				<option value="32">Güigüe</option>
+				<option value="35">Los Guayos</option>
+				<option value="41">Mariara</option>
+				<option value="44">Nguanagua</option>
+				<option value="48">Puerto Cabello</option>
+				<option value="75">San Joaquin</option>
+				<option value="63">Tocuyito</option>
+				<option value="9">Cagua</option>
+				<option value="23">El Limón</option>
+				<option value="34">La Victoria</option>
+				<option value="59">Santa Rita</option>
+				<option value="66">Turmero</option>
+				<option value="71">Villa de Cura</option>
 			</select>
 		</div>
 		<!-- sector -->
 		<div class="cmps">
 			<span class="etiq"></span>
-			<select id="" class="campo" style="width:11.5em;">
-				<!-- <option value="nodefinido">Seleccione una opción</option> -->
-				<option value="Valencia">Valencia</option>
-				<option value="Naguanagua">Naguanagua</option>
-				<option value="Maracay">Maracay</option>
-			</select>
+			<input id="" class="campo" type="text"  size="50" maxlength="100" />
 		</div>
 		<!-- dirección -->
 		<div class="cmps">
@@ -119,7 +128,7 @@
 		<!-- direccion de trabajo -->
 		<div class="cmps">
 			<span class="etiq"></span>
-			<input id="" class="campo" type="text"  size="50" maxlength="100" />
+			<input id="" class="campo" type="text"  size="50" maxlength="250" />
 		</div>
 		<!-- email de trabajo -->
 		<div class="cmps">
@@ -189,29 +198,43 @@
 			<input id="" class="campo fecha" type="date" />
 		</div>
 		<!-- numero de hijos -->
-		<div id="socio" class="cmps">
+		<div class="cmps">
 			<span class="etiq"></span>
 			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
 		</div>
 		<!-- hijos menores de 5 -->
-		<div id="socio" class="cmps">
+		<div class="cmps">
 			<span class="etiq"></span>
 			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
 		</div>
 		<!-- hijos entre 5 y 10 -->
-		<div id="socio" class="cmps">
+		<div class="cmps">
 			<span class="etiq"></span>
 			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
 		</div>
 		<!-- hijos entre 11 y 20 -->
-		<div id="socio" class="cmps">
+		<div class="cmps">
 			<span class="etiq"></span>
 			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
 		</div>
 		<!-- hijos mayores de 20 -->
-		<div id="socio" class="cmps">
+		<div class="cmps">
 			<span class="etiq"></span>
 			<input id="" class="campo" type="number" min="0" max="99" value="0" style="width:3em;" />
+		</div>
+		<!-- donde entregar -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<select id="" class="campo" style="width:11.5em;" onchange="asignadireccion(this.value)">
+				<option value="residencia" selected>Residencia</option>
+				<option value="trabajo">Trabajo</option>
+				<option value="otra">Otra</option>
+			</select>
+		</div>
+		<!-- dirección de entrega -->
+		<div class="cmps">
+			<span class="etiq"></span>
+			<input id="" class="campo" type="text" size="50" maxlength="250" />
 		</div>
 
 		<!-- Variable para controlar el proveedor -->
@@ -226,7 +249,24 @@
 		</div>
 	</div>
 <script>
-
+	function asignadireccion(valor) {
+		var direccion;
+		switch (valor) {
+			case 'residencia':
+				direccion = document.getElementById("direccion").value;
+				break;
+			case 'trabajo':
+				direccion = document.getElementById("direcciontrabajo").value;
+				break;
+			case 'otra':
+				direccion = "";
+				break;
+			default:
+				direccion = document.getElementById("direccion").value;
+				break;
+		}
+		document.getElementById("direccion_entrega").value = direccion;
+	}
 </script>
 </body>
 </html>
