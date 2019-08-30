@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Club de consumidores</title>
+		<link rel="stylesheet" href="cuponera.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 style="text-align: center; color: black;">Club de consumidores</h3>
+			<h5 style="text-align: center; color: black;">Servcios a los socios</h5>
+			<h2 style="text-align: center; color: black;">Cupones</h2>
+			<h5 style="text-align: center; color: red;">Haz click sobre un renglón para ver sus opciones</h5>
+			<br/>
+			<!-- <div id="cuponera" class="tabla"> -->
+			<div id="f-t0" class="filtros" display="none">
+				<div id="" class="columna5">
+					Comercio<br/>
+					<select id="filtrocomercio2" onchange="filtrocomercio2()">
+						<option value="todos">Todos</option>
+					</select>
+				</div>
+				<div id="" class="columna6">
+					Premio<br/>
+					<select id="filtropremio2" onchange="filtropremio2()">
+						<option value="todos">Todos</option>
+					</select>
+				</div>
+			</div>
+			<br/>
+			<div id="cuponera" class="tabla">
+				<div id="f-t" class="fila titulo">
+					<div id="" class="columna1">
+						Cupón<br/>
+						<div style="display: inline-flex; justify-content: center;">
+							<button id="orden1" onclick="ordenar(1,12)" style="width: 3em;">A->Z</button>
+							<button id="orden2" onclick="ordenar(1,21)" style="width: 3em;">Z->A</button>
+						</div>
+					</div>
+					<div id="" class="columna2">
+						Comercio<br/>
+						<select id="filtrocomercio" onchange="filtrocomercio()">
+							<option value="todos">Todos</option>
+						</select>
+					</div>
+					<div id="" class="columna3">
+						Premio<br/>
+						<select id="filtropremio" onchange="filtropremio()">
+							<option value="todos">Todos</option>
+						</select>
+					</div>
+					<div id="" class="columna4">
+						Vencimiento<br/>
+						<div style="display: inline-flex; justify-content: center;">
+							<button id="orden3" onclick="ordenar(2,12)" style="width: 3em;">A->Z</button>
+							<button id="orden4" onclick="ordenar(2,21)" style="width: 3em;">Z->A</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+
+			var idsocio = sessionStorage.getItem("idsocio");
+
+			if (idsocio==undefined) {
+				idsocio = 1;
+			}
+
+			var respuesta, proveedores, premios, cupones, dspl = "";
+			var canjear = function() { canje_cupon(this.id); }
+			var transferir = function() { transf_cupon(this.id); }
+			var validaemail = function () { soloemail(this.id,this.value,1); }
+			var opciones = function () { despliegue(this.id); }
+
+			function despliegue(ident) {
+				var pos, elm, trg, clk;
+				trg = event.target.id;
+				pos = ident.search("-despliegue");
+				if(pos<0) {
+					elm = ident;
+					clk = ident;
+				} else {
+					elm = ident.substr(0,pos);
+					clk = trg.substr(0,pos);
+				}
+				// console.log("ident "+ident);				
+				// console.log("elm "+elm);				
+				// console.log("trg "+trg);				
+				// console.log("clk "+clk);				
+
+				if (clk==elm || clk==elm+"-despliegue") {
+					ps2 = ident.search("input-");
+					if (ps2<0) {
+						console.log(dspl);
+						console.log(elm+"-despliegue");
+						if (dspl!="") {
+							document.getElementById(dspl).style.display = 'none';
+							if (dspl!=elm+"-despliegue") {
+								if (document.getElementById(elm+"-despliegue").style.display == 'none') {
+									document.getElementById(elm+"-despliegue").style.display = 'grid';
+									dspl = elm+"-despliegue";
+								} else {
+									document.getElementById(dspl).style.display = 'none';
+									dspl = "";
+								}
+							}
+						} else {
+							document.getElementById(elm+"-despliegue").style.display = 'grid';
+							dspl = elm+"-despliegue";
+						}
+
+						// 	document.getElementById(dspl).style.display = 'none';
+						// 	if (document.getElementById(elm+"-despliegue").style.display == 'none') {
+						// 		document.getElementById(elm+"-despliegue").style.display = 'grid';
+						// 		dspl = elm+"-despliegue";
+						// 	} else {
+						// 		document.getElementById(elm+"-despliegue").style.display = 'none';
+						// 		dspl = "";
+						// 	}
+						// } else {
+						// 	if (document.getElementById(elm+"-despliegue").style.display == 'none') {
+						// 		document.getElementById(elm+"-despliegue").style.display = 'grid';
+						// 		dspl = elm+"-despliegue";
+						// 	} else {
+						// 		document.getElementById(elm+"-despliegue").style.display = 'none';
+						// 		dspl = "";
+						// 	}
+						// }
+					}
+				}
+			}
+
+			function inicio() {
+				var paroimpar;
+				var xmlhttp = new XMLHttpRequest();``
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						proveedores = respuesta.proveedores;
+						premios = respuesta.premios;
+						cupones = respuesta.cupones;
+						// Proveedores
+						for (var i = 0; i < proveedores.length; i++) {
+							opc = document.createElement("option");
+							lblopc = document.createTextNode(proveedores[i].nombreproveedor);
+							opc.appendChild(lblopc);
+							opc.value = proveedores[i].nombreproveedor;
+							document.getElementById("filtrocomercio").appendChild(opc);
+
+							opc = document.createElement("option");
+							lblopc = document.createTextNode(proveedores[i].nombreproveedor);
+							opc.appendChild(lblopc);
+							opc.value = proveedores[i].nombreproveedor;
+							document.getElementById("filtrocomercio2").appendChild(opc);
+						}
+						// Premios
+						for (var i = 0; i < premios.length; i++) {
+							// agrega = true;
+							// for (var j = 0; j < i; j++) {
+							// 	if (premios[i].premio==premios[j].premio) {
+							// 		agrega = false;
+							// 		break;
+							// 	}
+							// }
+							// if (agrega) {
+								opc = document.createElement("option");
+								lblopc = document.createTextNode(premios[i].premio);
+								opc.appendChild(lblopc);
+								opc.value = premios[i].premio;
+								document.getElementById("filtropremio").appendChild(opc);
+
+								opc = document.createElement("option");
+								lblopc = document.createTextNode(premios[i].premio);
+								opc.appendChild(lblopc);
+								opc.value = premios[i].premio;
+								document.getElementById("filtropremio2").appendChild(opc);
+							// }
+						}
+						// Cupones
+						par = true;
+						for (var i = 0; i < cupones.length; i++) {
+							// cupon
+							txtcpn = document.createTextNode(cupones[i].cuponlargo);
+							cl1 = document.createElement("div");
+							cl1.id = cupones[i].cuponlargo+'-1';
+							cl1.classList.add("columna1");
+							cl1.appendChild(txtcpn);
+							// comercio
+							txtprv = document.createTextNode(cupones[i].nombreproveedor);
+							cl2 = document.createElement("div");
+							cl2.id = cupones[i].cuponlargo+'-2';
+							cl2.classList.add("columna2");
+							cl2.appendChild(txtprv);
+							// comercio
+							txtprm = document.createTextNode(cupones[i].premio);
+							cl3 = document.createElement("div");
+							cl3.id = cupones[i].cuponlargo+'-3';
+							cl3.classList.add("columna3");
+							cl3.appendChild(txtprm);
+							// vencimiento
+							txtfvn = document.createTextNode(cupones[i].fechavencimiento);
+							cl4 = document.createElement("div");
+							cl4.id = cupones[i].cuponlargo+'-4';
+							cl4.classList.add("columna4");
+							cl4.appendChild(txtfvn);
+
+							fila = document.createElement("div");
+							fila.id = cupones[i].cuponlargo;
+							fila.classList.add("fila");
+							if (par) {
+								fila.classList.add("par");
+								paroimpar = "par";
+								par = false;
+							} else {
+								fila.classList.add("impar");								
+								paroimpar = "impar";
+								par = true;
+							}
+
+							/////////////////////////////////
+							/////////////////////////////////
+							fila.appendChild(cl1);
+							fila.appendChild(cl2);
+							fila.appendChild(cl3);
+							fila.appendChild(cl4);
+							// fila.appendChild(opciones);
+							fila.addEventListener('click', function(){ despliegue(this.id) });
+
+							document.getElementById("cuponera").appendChild(fila);
+						/////////////////////////////////
+						// Botón canjear
+						txtcnj = document.createTextNode("Canjear");
+						btn1 = document.createElement("button");
+						btn1.appendChild(txtcnj);
+						btn1.id = "canjear-"+cupones[i].cuponlargo;
+						btn1.addEventListener('click', canjear);
+						///////////////////////////////////////////////////////
+						// Transferir a otro socio
+						lblcmp = document.createElement("span");
+						lbl = document.createTextNode("Transferir a otro socio");
+						lblcmp.appendChild(lbl);
+						lblcmp.style = "padding-right: 0.5em;";
+
+						valcmp = document.createElement("input");
+						valcmp.id = "input-"+cupones[i].cuponlargo;
+						valcmp.type = "email";
+						valcmp.size = "50";
+						// valcmp.style = "text-align: right;";
+						valcmp.setAttribute("maxlength", "100");
+						valcmp.title = "Debe introducir un formato de email válido (incluir el @ y al menos un . )";
+						valcmp.addEventListener('focus',  function(){ despliegue(this.id) });
+						// valcmp.addEventListener('change', validaemail);
+						///////////////////////////////////////////////////////
+
+						// Boton transferir
+						txttrf = document.createTextNode("Enviar");
+						btn2 = document.createElement("button");
+						btn2.appendChild(txttrf);
+						btn2.id = "transferir-boton-"+cupones[i].cuponlargo;
+						btn2.addEventListener('click', transferir);
+
+						trnsfr = document.createElement("div");
+						trnsfr.id = cupones[i].cuponlargo+"-transferir";
+						trnsfr.appendChild(lblcmp);
+						trnsfr.appendChild(valcmp);
+						trnsfr.appendChild(btn2);
+
+						// despliegue de opciones
+
+						opciones = document.createElement("div");
+						opciones.id = cupones[i].cuponlargo+"-despliegue";
+						opciones.classList.add("fila");
+						opciones.classList.add(paroimpar);
+						opciones.classList.add("despliegue");
+						opciones.appendChild(btn1);
+						opciones.appendChild(trnsfr);
+						opciones.style.display = 'none';
+						opciones.addEventListener('click',  function(){ despliegue(this.id) }, true);
+						document.getElementById("cuponera").appendChild(opciones);
+
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/buscacupones.php?idsocio="+idsocio, false);
+				xmlhttp.send();
+			}
+
+			function ordenar(columna,orden) {
+				// despliegue(0);
+				if (dspl!="") {
+					document.getElementById(dspl).style.display = 'none';
+					dspl = "";
+				}
+				document.getElementById("filtrocomercio").value = 'todos';
+				document.getElementById("filtropremio").value = 'todos';
+				document.getElementById("filtrocomercio2").value = 'todos';
+				document.getElementById("filtropremio2").value = 'todos';
+				filtrocomercio();
+				filtropremio();
+				filtrocomercio2();
+				filtropremio2();
+				ordena_array(cupones,columna,orden);
+			}
+
+			function ordena_array(arreglo,columna,orden) {
+				// La siguiente sección ordena el arreglo que se pase como parametro, el segundo parametro es la columna del arreglo que se usará de indice, el tercer parametro es el orden de mayor a menor o de menor a mayor.
+				// despliegue(0);
+				document.getElementById("filtrocomercio").value = 'todos';
+				document.getElementById("filtrocomercio2").value = 'todos';
+				arreglo2 = [];
+				for (var i = 0; i < arreglo.length; i++) {
+					for (var j = i; j < arreglo.length; j++) {
+						if (columna==1) {
+							if (orden==12) {
+								if (arreglo[i].cuponlargo>arreglo[j].cuponlargo) {
+									arreglo2 = arreglo[i];
+									arreglo[i] = arreglo[j];
+									arreglo[j] = arreglo2;
+								}
+							} else {
+								if (arreglo[i].cuponlargo<arreglo[j].cuponlargo) {
+									arreglo2 = arreglo[i];
+									arreglo[i] = arreglo[j];
+									arreglo[j] = arreglo2;
+								}
+							}
+						} else {
+							f1 = arreglo[i].fechavencimiento.substr(6,4)+arreglo[i].fechavencimiento.substr(3,2)+arreglo[i].fechavencimiento.substr(0,2);
+							f2 = arreglo[j].fechavencimiento.substr(6,4)+arreglo[j].fechavencimiento.substr(3,2)+arreglo[j].fechavencimiento.substr(0,2);
+							if (orden==12) {
+								if (f1>f2) {
+									arreglo2 = arreglo[i];
+									arreglo[i] = arreglo[j];
+									arreglo[j] = arreglo2;
+								}
+							} else {
+								if (f1<f2) {
+									arreglo2 = arreglo[i];
+									arreglo[i] = arreglo[j];
+									arreglo[j] = arreglo2;
+								}
+							}
+						}
+					}
+				}
+
+				// Esta sección refresca el DOM con el nuevo orden cambiando incluso los ID de los elementos.
+				console.log(arreglo);
+				console.log(cupones);
+				var fl = 0, fl2 = 0;
+				for (var i = 0; i < cupones.length; i++) {
+					fl = fl2+1;
+					fl2 = fl+1;
+					document.getElementsByClassName("fila")[fl].childNodes[0].id = cupones[i].cuponlargo+'-1';
+					document.getElementsByClassName("fila")[fl].childNodes[0].innerHTML = cupones[i].cuponlargo;
+
+					document.getElementsByClassName("fila")[fl].childNodes[1].id = cupones[i].cuponlargo+'-2';
+					document.getElementsByClassName("fila")[fl].childNodes[1].innerHTML = cupones[i].nombreproveedor;
+
+					document.getElementsByClassName("fila")[fl].childNodes[2].id = cupones[i].cuponlargo+'-3';
+					document.getElementsByClassName("fila")[fl].childNodes[2].innerHTML = cupones[i].premio;
+
+					document.getElementsByClassName("fila")[fl].childNodes[3].id = cupones[i].cuponlargo+'-4';
+					document.getElementsByClassName("fila")[fl].childNodes[3].innerHTML = cupones[i].fechavencimiento;
+
+					document.getElementsByClassName("fila")[fl].id = cupones[i].cuponlargo
+					document.getElementsByClassName("fila")[fl].addEventListener('click', function(){ despliegue(this.id) });
+
+					///////////////////////////////////////
+					// A partir de acá es el despliegue
+					///////////////////////////////////////
+					document.getElementsByClassName("fila")[fl2].id = cupones[i].cuponlargo+'-despliegue';
+					document.getElementsByClassName("fila")[fl2].childNodes[0].id = 'canjear-'+cupones[i].cuponlargo;
+					document.getElementsByClassName("fila")[fl2].childNodes[1].id = cupones[i].cuponlargo+'-transferir';
+					document.getElementsByClassName("fila")[fl2].childNodes[1].childNodes[1].id = 'input-'+cupones[i].cuponlargo;
+					document.getElementsByClassName("fila")[fl2].childNodes[1].childNodes[2].id = 'transferir-boton-'+cupones[i].cuponlargo;
+					document.getElementsByClassName("fila")[fl2].addEventListener('click', function(){ despliegue(this.id) });
+
+				}
+			}
+
+			function filtrocomercio() {
+				// despliegue(0);
+				if (dspl!="") {
+					document.getElementById(dspl).style.display = 'none';
+					dspl = "";
+				}
+				for (var i = 0; i < cupones.length; i++) {
+					if (document.getElementById("filtrocomercio").value=='todos') {
+						if (document.getElementById("filtropremio").value=='todos') {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+						} else {
+							if (document.getElementById("filtropremio").value!=cupones[i].premio) {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						}
+					} else {
+						if (document.getElementById("filtrocomercio").value!=cupones[i].nombreproveedor) {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+						} else {
+							if (document.getElementById("filtropremio").value!=cupones[i].premio && document.getElementById("filtropremio").value!='todos') {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						} 
+					}
+				}
+			}
+
+			function filtropremio() {
+				// despliegue(0);
+				if (dspl!="") {
+					document.getElementById(dspl).style.display = 'none';
+					dspl = "";
+				}
+				for (var i = 0; i < cupones.length; i++) {
+					if (document.getElementById("filtropremio").value=='todos') {
+						if (document.getElementById("filtrocomercio").value=='todos') {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+						} else {
+							if (document.getElementById("filtrocomercio").value!=cupones[i].nombreproveedor) {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						}
+					} else {
+						if (document.getElementById("filtropremio").value!=cupones[i].premio) {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+						} else {
+							if (document.getElementById("filtrocomercio").value!=cupones[i].nombreproveedor && document.getElementById("filtrocomercio").value!='todos') {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						} 
+					}
+				}
+			}
+
+			function filtrocomercio2() {
+				// despliegue(0);
+				if (dspl!="") {
+					document.getElementById(dspl).style.display = 'none';
+					dspl = "";
+				}
+				for (var i = 0; i < cupones.length; i++) {
+					if (document.getElementById("filtrocomercio2").value=='todos') {
+						if (document.getElementById("filtropremio2").value=='todos') {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+						} else {
+							if (document.getElementById("filtropremio2").value!=cupones[i].premio) {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						}
+					} else {
+						if (document.getElementById("filtrocomercio2").value!=cupones[i].nombreproveedor) {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+						} else {
+							if (document.getElementById("filtropremio2").value!=cupones[i].premio && document.getElementById("filtropremio2").value!='todos') {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						} 
+					}
+				}
+			}
+
+			function filtropremio2() {
+				// despliegue(0);
+				if (dspl!="") {
+					document.getElementById(dspl).style.display = 'none';
+					dspl = "";
+				}
+				for (var i = 0; i < cupones.length; i++) {
+					if (document.getElementById("filtropremio2").value=='todos') {
+						if (document.getElementById("filtrocomercio2").value=='todos') {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+						} else {
+							if (document.getElementById("filtrocomercio2").value!=cupones[i].nombreproveedor) {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						}
+					} else {
+						if (document.getElementById("filtropremio2").value!=cupones[i].premio) {
+							document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+						} else {
+							if (document.getElementById("filtrocomercio2").value!=cupones[i].nombreproveedor && document.getElementById("filtrocomercio2").value!='todos') {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'none';
+							} else {
+								document.getElementById(cupones[i].cuponlargo).style.display = 'flex';
+							} 
+						} 
+					}
+				}
+			}
+
+			function soloemail(elemento,correo,opc) {
+				if (correo!="") {
+					arroba = 0;
+					punto = 0;
+					posa = 0;
+					posp = 0;
+					for (index = 0; index < correo.length; index++) {
+						if (correo[index] == "@") { arroba++; posa = index; }
+						if (correo[index] == ".") { punto++; posp = index; }
+					}
+					if (arroba + punto > 1 && posp > posa) {
+						return true;
+					} else {
+						if (opc==1) { alert('Email invalido.'); }
+						// document.getElementById(elemento).focus();
+						return false;
+					}
+				}
+			}
+
+			function canje_cupon(elemento) {
+				// sessionStorage.setItem("id_proveedor", valor);
+				acupon  = elemento.split("canjear-");
+				cupon = acupon[1];
+				id_proveedor = 0;
+				for (var i = 0; i < cupones.length ; i++) {
+					if (cupones[i].cuponlargo==cupon) {
+						for (var j = 0; j < proveedores.length; j++) {
+							if (proveedores[j].nombreproveedor==cupones[i].nombreproveedor) {
+								id_proveedor = proveedores[j].id_proveedor;
+								break;
+							}
+						}
+					}
+				}
+				if (id_proveedor>0) {
+					alert('En construcción.');
+					// window.location.replace('../canje/canje.html?cJson={"id_proveedor":'+id_proveedor+',"cupon":"'+cupon+'"}');
+				}
+			}
+
+			function transf_cupon(elemento) {
+				acupon  = elemento.split("transferir-boton-");
+				cupon = acupon[1];
+				elemento = "input-"+cupon;
+				correo = document.getElementById(elemento).value;
+				if (soloemail(elemento,correo,2)) {
+					var datos = new FormData();
+					datos.append("correo", correo);
+					datos.append("cupon", cupon);
+
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							if (respuesta.exito == 'SI') {
+								document.getElementById(dspl).style.display = 'none';
+								mensaje = respuesta.mensaje;
+								for (var i = 0; i < cupones.length; i++) {
+									document.getElementById("cuponera").removeChild(document.getElementById(cupones[i].cuponlargo));
+								}
+								inicio();
+								document.getElementById("filtrocomercio").value = 'todos';
+								document.getElementById("filtropremio").value = 'todos';
+								document.getElementById("filtrocomercio2").value = 'todos';
+								document.getElementById("filtropremio2").value = 'todos';
+								filtrocomercio();
+								filtropremio();
+								filtrocomercio2();
+								filtropremio2();
+								alert(mensaje);
+							} else {
+								alert(respuesta.mensaje);
+							}
+						}
+					};
+					xmlhttp.open("POST", "../php/transfierecupon.php", false);
+					xmlhttp.send(datos);
+				} else {
+					alert('Formato del email no valido, por favor intenta de nuevo.');
+					document.getElementById(elemento).focus();
+				}
+			}
+		</script>
+	</body>
+</html>

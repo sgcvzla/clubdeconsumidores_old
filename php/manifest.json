@@ -1,0 +1,18 @@
+{
+	"short_name":"giftcards",
+	"name":"gift cards",
+	"start_url":"/index.html",
+	"display":"fullscreen",
+	"icons": [
+		{
+			"src":"../img/logoclub.png",
+			"sizes":"192x192",
+			"type":"image/png"
+		},
+		{
+			"src":"../img/logoclub.png",
+			"sizes":"192x192",
+			"type":"image/png"
+		}		
+	]
+}
