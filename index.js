@@ -27,21 +27,22 @@ function cargadatos() {
 						lista += '<a id="' + datos.registros[i].id + '" href="menu.html?id_proveedor='+datos.registros[i].id+'" onclick="comercio(this.id)">';
 							lista += '<div class="item ' + datos.registros[i].categoria + '" align="center">';
 								lista += '<div class="imagen" align="center">';
-								// lista += '<a id="' + datos.registros[i].id + '" href="cupones/cupon.html?id=' + datos.registros[i].id + '" onclick="sesionprov(this.id)">';
-								if (fexisteUrl(ruta + datos.registros[i].imagen)) {
-									if (datos.registros[i].imagen == "") {
-										lista += '<img class="img_comercio" src="' + ruta + 'sin_imagen.jpg' + '" title="' + datos.registros[i].nombre + '" />';
+									// lista += '<a id="' + datos.registros[i].id + '" href="cupones/cupon.html?id=' + datos.registros[i].id + '" onclick="sesionprov(this.id)">';
+									if (fexisteUrl(ruta + datos.registros[i].imagen)) {
+										if (datos.registros[i].imagen == "") {
+											lista += '<img class="img_comercio" src="' + ruta + 'sin_imagen.jpg' + '" title="' + datos.registros[i].nombre + '" />';
+										} else {
+											lista += '<img class="img_comercio" src="' + ruta + datos.registros[i].imagen + '" title="' + datos.registros[i].nombre + '" />';
+										}
 									} else {
-										lista += '<img class="img_comercio" src="' + ruta + datos.registros[i].imagen + '" title="' + datos.registros[i].nombre + '" />';
+										if (datos.registros[i].imagen == "") {
+											lista += '<img class="img_comercio" src="' + ruta + 'sin_imagen.jpg' + '" title="' + datos.registros[i].nombre + '" />';
+										} else {
+											lista += '<img class="img_comercio" src="' + ruta + datos.registros[i].imagen + '" title="' + datos.registros[i].nombre + '" />';
+										}
 									}
-								} else {
-									if (datos.registros[i].imagen == "") {
-										lista += '<img class="img_comercio" src="' + ruta + 'sin_imagen.jpg' + '" title="' + datos.registros[i].nombre + '" />';
-									} else {
-										lista += '<img class="img_comercio" src="' + ruta + datos.registros[i].imagen + '" title="' + datos.registros[i].nombre + '" />';
-									}
-								}
 								lista += '</div>';
+								lista += '<span>' + datos.registros[i].nombre + '</span>';
 							lista += '</div>';
 						lista += '</a>';
 					}

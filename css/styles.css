@@ -21,14 +21,16 @@
 }
 
 .logo {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     margin: 10px auto;
-    height: 10em;
-    width: 10em;
+    height: auto;
+    width: 100%;
     text-align: center;
 }
 
 .img-logo {
-    width: 100%;
+    width: 12em;
     height: auto;
     object-fit: contain;
 }
@@ -59,10 +61,11 @@ h5 {
     height: var(--alto);
     /* grid-template-columns: calc(var(--ancho)*.7) 1 1;
     grid-template-rows: calc(var(--alto)*.7) 1 1; */
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     text-align: center;
     border: black solid thin;
+    padding-bottom: 1em;
 }
 
 .img_comercio {
@@ -86,4 +89,9 @@ h5 {
 	h3 {
 		color: blue;
 	}
+    .img-logo {
+        width: 8em;
+        height: auto;
+        object-fit: contain;
+    }
 }
