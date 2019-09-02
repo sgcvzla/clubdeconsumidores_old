@@ -42,7 +42,7 @@ function cargadatos() {
 										}
 									}
 								lista += '</div>';
-								lista += '<span>' + datos.registros[i].nombre + '</span>';
+								lista += '<span style="margin-bottom: 1em;">' + datos.registros[i].nombre + '</span>';
 							lista += '</div>';
 						lista += '</a>';
 					}
