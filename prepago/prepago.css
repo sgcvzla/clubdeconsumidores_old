@@ -140,11 +140,6 @@
   border: solid thin;
 }
 
-.imgright {
-  float: right;
-  margin: 12.5px 15px;
-}
-
 .titlenew {
   color: white;
   font-weight: 300;
@@ -154,10 +149,10 @@
 .title {
   /* color: #C6008C; */
   color: white;
+  /* font-size: 18px; */
   font-weight: 300;
-  font-size: 135%;
   /* margin: 0; */
-  margin: 50px 10px 0 90px;
+  margin: 50px 0px 0 90px;
 }
 
 .price {

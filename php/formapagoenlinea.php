@@ -6,13 +6,23 @@ $card = (isset($_GET['card'])) ? $_GET['card'] : '' ;
 $monto = (isset($_GET['monto'])) ? $_GET['monto'] : 0 ;
 $ruta = (isset($_GET['ruta'])) ? $_GET['ruta'] : '' ;
 
-if ($ruta=='giftcards') {
-    $urlok = 'https://www.clubdeconsumidores.com.ve/php/exitocompragiftcards.php?card='.$card;
-    $urlcb = 'https://www.clubdeconsumidores.com.ve/giftcards';
-    // $urlok = 'https://www.clubdeconsumidoes.com.ve/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
-} else {
-    $urlok = '';
-    $urlcb = '';
+$urlok = '';
+$urlcb = '';
+switch ($ruta) {
+    case 'giftcards':
+        $urlok = 'https://www.clubdeconsumidores.com.ve/php/exitocompragiftcards.php?card='.$card;
+        $urlcb = 'https://www.clubdeconsumidores.com.ve/giftcards';
+        // $urlok = 'https://www.clubdeconsumidoes.com.ve/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
+        break;
+    case 'prepago':
+        $urlok = 'https://www.clubdeconsumidores.com.ve/php/exitocompraprepago.php?card='.$card;
+        $urlcb = 'https://www.clubdeconsumidores.com.ve/prepago';
+        // $urlok = 'https://www.clubdeconsumidoes.com.ve/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
+        break;
+    default:
+        $urlok = '';
+        $urlcb = '';
+        break;
 }
 
 include_once('../apis/pagoflash.api.client.php');

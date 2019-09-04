@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
 		<title>Club de consumidores</title>
-		<link rel="stylesheet" href="giftcards.css">
+		<link rel="stylesheet" href="prepago.css">
 		<!-- <link rel="manifest" href="./manifest.json"> -->
 		<script type="text/javascript" src="../js/funciones.js"></script>
 	</head>
@@ -20,7 +20,7 @@
 			<!-- <h3 style="text-align: center; color: black;">Club de consumidores</h3> -->
 			<!-- <h5 style="text-align: center; color: black;">Servcios a los socios</h5> -->
 			<h3 id="titulosocio" style="text-align: center; color: blue;"></h3>
-			<h2 style="text-align: center; color: black;">Tarjetas de regalo</h2>
+			<h2 style="text-align: center; color: black;">Tarjetas prepagadas</h2>
 			<!-- <h5 style="text-align: center; color: red;">Haz click sobre un renglón para ver sus opciones</h5> -->
 			<br/>
 			<div id="cards" class="catalogo">
@@ -40,7 +40,7 @@
 		</div>
 
 		<!-- Ventana modal para comprar nuevas gift cards -->
-		<div id="compragiftcard" class="modal2" align="center" style="display: none;">
+		<div id="compraprepago" class="modal2" align="center" style="display: none;">
 			<div id="monedas" class="divisas">
 				<div style="margin: auto;">
 					<button id="bolivares" onclick="formulario('bs')" style="margin: 10px; cursor: pointer;">
@@ -54,8 +54,8 @@
 				</div>
 			</div>
 			<div id="formulariocompra" style="height: 310px;">
-				<p class="parrafo">Puedes adquirir esta tarjeta de regalo para ti y usarla en otro momento.</p>
-				<p class="parrafo">Por favor introduce el monto de la tarjeta de regalo que deseas comprar.</p>
+				<p class="parrafo">Puedes adquirir esta tarjeta prepagada para ti y usarla en otro momento.</p>
+				<p class="parrafo">Por favor introduce el monto de la gift card que deseas comprar.</p>
 				<br/>
 				<input id="montocompra" class="valores" style="text-align: right;" type="text" name="" />
 				<br/>
@@ -92,12 +92,12 @@
 		</div>
 
 		<!-- Ventana modal para presentar la tarjeta para escaneo o regalar -->
-		<div id="presentagiftcard" class="modal" align="center" style="display: none;">
-			<p class="parrafo">Puede usar esta tarjeta de regalo escaneando el código QR o regalarla completando el formulario con los datos del benficiario.</p>
+		<div id="presentaprepago" class="modal" align="center" style="display: none;">
+			<p class="parrafo">Puede usar esta tarjeta prepagada escaneando el código QR o regalarla completando el formulario con los datos del benficiario.</p>
 			<div class="block2 front">
 				<div class="top">
 					<img class="left" src="../img/logoclub.png" width="60" height="60" draggable="false" />
-					<h2 class="title2">Tarjeta de regalo</h2>
+					<h2 class="title2">Tarjeta prepagada</h2>
 					<h3 id="monto" class="price2">30.00 USD</h3>
 				</div>
 				<div class="bottom">
@@ -197,15 +197,8 @@
 							lgc.src = "../img/"+cards[i].logoproveedor;
 							lgc.width = 60;
 							lgc.height = 60;
-							// ícono Gift card
-							igc = document.createElement("img");
-							igc.classList.add("imgright");
-							igc.src = "24px.svg";
-							igc.color = "white";
-							igc.width = 35;
-							igc.height = 35;
 							// Titulo
-							txtgc = document.createTextNode("Tarjeta de regalo");
+							txtgc = document.createTextNode("Tarjeta Prepagada");
 							tgc = document.createElement("h2");
 							tgc.classList.add("title");
 							tgc.appendChild(txtgc);
@@ -220,7 +213,6 @@
 							tp.classList.add("top");
 							tp.style.background = cards[i].color;
 							tp.appendChild(lgc);
-							tp.appendChild(igc);
 							tp.appendChild(tgc);
 							tp.appendChild(mgc);
 							// Parte inferior
@@ -231,6 +223,7 @@
 							sgc.src = "../img/"+cards[i].dibujomoneda;
 							sgc.width = 50;
 							sgc.height = 50;
+							console.log(sgc.margin);
 							// seccion del qr
 							msgc = document.createElement("div");
 							msgc.classList.add("left");
@@ -267,12 +260,12 @@
 						}
 					}
 				};
-				xmlhttp.open("GET", "../php/buscagiftcards.php?idsocio="+idsocio, true);
+				xmlhttp.open("GET", "../php/buscaprepago.php?idsocio="+idsocio, true);
 				xmlhttp.send();
 			}
 
 			function abremodal2() {
-				document.getElementById("compragiftcard").style.display = 'block';
+				document.getElementById("compraprepago").style.display = 'block';
 				document.getElementById("formulariocompra").style.display = 'none';
 			}
 
@@ -358,7 +351,7 @@
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito == 'SI') {
 							propiedades="top=20%, left=50%, width=450, height=635, menubar=0, resizable=0, status=0, titlebar=0, toolbar=0";
-							window.open("../php/formapagoenlinea.php?card="+respuesta.card+"&monto="+monto+"&ruta=giftcards","_blank",propiedades);
+							window.open("../php/formapagoenlinea.php?card="+respuesta.card+"&monto="+monto+"&ruta=prepago","_blank",propiedades);
 						} else {
 							alert('Ocurrió un error, por favor intentalo de nuevo.');
 						}
@@ -379,17 +372,17 @@
 			function cerrarmodal2() {
 				document.getElementById("monedas").style.display = 'flex';
 				document.getElementById("formulariocompra").style.display = 'none';
-				document.getElementById("compragiftcard").style.display = 'none';
+				document.getElementById("compraprepago").style.display = 'none';
 			}
 
 			function abremodal(id) {
 				document.getElementById(id+"-monto").innerHTML = document.getElementById(id+"-monto").innerHTML;
 				document.getElementById(id+"-qr").src = document.getElementById(id+"-qr").src;
-				document.getElementById("presentagiftcard").style.display = 'block';
+				document.getElementById("presentaprepago").style.display = 'block';
 			}
 
 			function cerrarmodal() {
-				document.getElementById("presentagiftcard").style.display = 'none';
+				document.getElementById("presentaprepago").style.display = 'none';
 			}
 
 			function habilitar(siono) {
