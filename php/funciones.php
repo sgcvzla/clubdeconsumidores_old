@@ -102,4 +102,19 @@ function codigocaracter($valor) {
     return $newvalor;
 }
 
+function generacodigo($letra,$link) {
+    $query = "select codigo from _codigo where valor='".$letra."'";
+    $result = mysqli_query($link, $query);
+    if ($row = mysqli_fetch_array($result)) {
+        $codigo = $row["codigo"];
+    } else {
+        $query = "select codigo from _codigo where valor='?'";
+        $result = mysqli_query($link, $query);
+        $row = mysqli_fetch_array($result);
+        $codigo = $row["codigo"];
+    }
+    return $codigo;
+}
+
+
 ?>

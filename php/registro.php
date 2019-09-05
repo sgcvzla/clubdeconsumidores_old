@@ -235,6 +235,56 @@ function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$ar
 }
 
 function generarprepago($link,$socio,$email,$telefono,$nombres,$apellidos) {
+	$query = 'SELECT proveedores.id as idproveedor, proveedores.nombre, moneda FROM proveedores,_monedas';
+	$result = mysqli_query($link, $query);
+	while ($row = mysqli_fetch_array($result)) {
+		$idproveedor = $row["idproveedor"];
+		$nombreproveedor = $row["nombre"];
+		$moneda = $row["moneda"];
+
+		// Busca el próximo número de giftcard
+		$quer0 = "select auto_increment from information_schema.tables where table_schema='clubdeconsumidores' and table_name='prepago'";
+		$resul0 = mysqli_query($link,$quer0);
+		if($ro0 = mysqli_fetch_array($resul0)) {
+			$numgiftcard = $ro0["auto_increment"];
+		} else {
+			$numgiftcard = 0;
+		}
+		if ($numgiftcard > 9999) { $numgiftcard -= 9999; }
+		if ($numgiftcard < 10) {
+		    $txtgiftcard = "000".trim($numgiftcard);
+		} elseif ($numgiftcard < 100) {
+		    $txtgiftcard = "00".trim($numgiftcard);
+		} elseif ($numgiftcard < 1000) {
+		    $txtgiftcard = "0".trim($numgiftcard);
+		} else {
+		    $txtgiftcard = trim($numgiftcard);
+		}
+
+		$card = "";
+	    $card .= generacodigo(substr($nombres,0,1),$link);
+    	$card .= substr($txtgiftcard,0,1);
+
+	    $card .= generacodigo(substr($apellidos,0,1),$link);
+    	$card .= substr($txtgiftcard,1,1);
+
+	    $card .= generacodigo(substr($telefono,strlen($telefono)-1,1),$link);
+    	$card .= generacodigo(substr($email,0,1),$link);
+
+	    $card .= substr($txtgiftcard,2,1);
+    	$card .= generacodigo(substr($nombreproveedor,0,1),$link);
+
+	    $card .= substr($txtgiftcard,3,1);
+    	$card .= generacodigo(substr($moneda,0,1),$link);
+
+		$fecha = date('Y-m-d');
+		$status = 'Pendiente de pago';
+		$monto = 0.00;
+		$hash = hash("sha256",$card.$socio.$idproveedor.$monto.$moneda.$status);
+
+		$quer2 = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, moneda, fechacompra, status, socio, id_socio, id_proveedor, hash) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",'".$moneda."','".$fecha."','".$status."',1,".$socio.",".$idproveedor.",'".$hash."')";
+		$resul2 = mysqli_query($link, $quer2);
+	}
 	return true;
 }
 ?>
