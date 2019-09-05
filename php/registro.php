@@ -52,6 +52,9 @@ if ($status=="Pendiente") {
 	$query .= ',nombre_pais="'.$nombre_pais.'",nombre_estado="'.$nombre_estado.'",nombre_ciudad="'.$nombre_ciudad.'",fecha_afiliacion="'.date('Y-m-d').'" where id='.$_POST['id_socio'].';';
 	// echo $query;
 	if ($result = mysqli_query($link, $query)) {
+
+		generarprepago($link,$socio,$email,$telefono,$nombres,$apellidos);
+
 		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistro") . '}';
 		cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson);
 	} else {
@@ -231,5 +234,7 @@ function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$ar
 	// echo $respuesta;
 }
 
-
+function generarprepago($link,$socio,$email,$telefono,$nombres,$apellidos) {
+	return true;
+}
 ?>
