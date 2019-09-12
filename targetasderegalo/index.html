@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Club de consumidores</title>
+		<link rel="stylesheet" href="giftcards.css">
+		<!-- <link rel="manifest" href="./manifest.json"> -->
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<!-- <button id="instalar">Instalar</button> -->
+		<!-- <body> -->
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 style="text-align: center; color: black;">Club de consumidores</h3>
+			<h5 style="text-align: center; color: black;">Servcios a los socios</h5>
+			<h3 id="titulosocio" style="text-align: center; color: blue;"></h3>
+			<h2 style="text-align: center; color: black;">Targetas de Regalo</h2>
+			<!-- <h5 style="text-align: center; color: red;">Haz click sobre un renglón para ver sus opciones</h5> -->
+			<br/>
+			<div id="cards" class="catalogo">
+				<div>
+					<div id="" class="block front" onclick="abremodal2()" title="Haga click para seleccionar">
+  						<div class="topnew">
+    						<img class="left" src="../img/logoclub.png" width="60" height="60" draggable="false" />
+							<h1 class="titlenew" align="center"> 
+								<span href="#" class="buy">COMPRAR</span>
+							</h1>
+						</div>
+						<div class="bottomnew"></div>
+					</div>
+				</div>
+				<!--  -->
+			</div>
+		</div>
+
+		<!-- Ventana modal para comprar nuevas gift cards -->
+		<div id="compragiftcard" class="modal2" align="center" style="display: none;">
+			<div id="monedas" class="divisas">
+				<div style="margin: auto;">
+					<button id="bolivares" onclick="formulario('bs')" style="margin: 10px; cursor: pointer;">
+						<img id="" src="../img/bs.png" width="auto" height="100" />
+					</button>
+					<!-- 
+					<button id="dolares" onclick="formulario('dolares')" style="margin: 10px; cursor: pointer;">
+						<img id="" src="../img/dolar.png" width="auto" height="100" />
+					</button>
+					 -->
+				</div>
+			</div>
+			<div id="formulariocompra" style="height: 310px;">
+				<p class="parrafo">Puedes adquirir esta gift card para regalar.</p>
+				<p class="parrafo">Por favor introduce el monto de la gift card que deseas comprar.</p>
+				<br/>
+				<p class="parrafo">Si no es para ti, por favor completa la siguiente información:</p>
+				<br/>
+				<div>
+					<div class="campo">
+						<span class="etiqueta">Nombres</span>
+						<input id="nombres2" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">Apellidos</span>
+						<input id="apellidos2" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">Teléfono</span>
+						<input id="telefono2" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">e-mail</span>
+						<input id="email2" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">Monto</span>
+						<input id="montocompra" class="valores" type="text" name="" />
+					</div>
+				</div>
+				<!-- <br/> -->
+				<button id="cerrar" onclick="online(true)" style="margin: 10px; cursor: pointer;">Pago en línea</button>
+				<!-- <br/> -->
+				<button id="cerrar" onclick="online(false)" style="margin: 10px; cursor: pointer;">Reporte de pago</button>
+			</div>
+			<div id="reportepago" style="height: 310px;display: none;">
+				<p class="parrafo">ingrese los datos del reporte de pago</p>
+				<p class="parrafo">por favor completa la siguiente información:</p>
+				<br/>
+				<div>
+					<div class="campo">
+						<span class="etiqueta">tipo de transaccion</span>
+						<input id="tipotransaccion" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">comprobante</span>
+						<input id="documento_comprobante" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">origen</span>
+						<input id="origen" class="valores" type="text" name="" />
+					</div>
+					<div class="campo">
+						<span class="etiqueta">Monto</span>
+						<input id="montocompra2" class="valores" disabled type="text" name="" />
+					</div>
+				</div>
+				<br/> 
+				<button onclick="pago_reportedepago('e')" style="margin: 10px; cursor: pointer;">Pago en línea</button>
+			</div>
+
+			<br/>
+			<button id="cerrar" onclick="cerrarmodal2()" style="margin: 10px; cursor: pointer;">Cerrar ventana</button>
+			</div>
+		<script>
+			// función para mostrar los decimales que se quieran
+			var formatNumber = {
+				separador: ".", // separador para los miles
+				sepDecimal: ',', // separador para los decimales
+
+				formatear:function (num){
+					num +='';
+					var splitStr = num.split('.');
+					var splitLeft = splitStr[0];
+					var splitRight = splitStr.length > 1 ? this.sepDecimal + splitStr[1] : this.sepDecimal + '00';
+					var regx = /(\d+)(\d{3})/;
+					while (regx.test(splitLeft)) {
+						splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
+					}
+					return this.simbol + splitLeft +splitRight;
+				},
+				new:function(num, simbol){
+					this.simbol = simbol ||'';
+					return this.formatear(num);
+				}
+			}
+
+			var cards, tipomoneda = 'bs';
+			var idsocio = sessionStorage.getItem("idsocio");
+			var idproveedor = sessionStorage.getItem("idproveedor");
+			var divisa = null
+
+			if (idsocio==undefined) { idsocio = 1; }
+			if (idproveedor==undefined) { idproveedor = 1; }
+
+			var pagobs = function() { pagoenlinea('bs'); }
+			var pagodolar = function() { pagoenlinea('dolar'); }
+			var reportebs = function () { reporte('bs'); }
+			var reportedolar = function () { reporte('dolar'); }
+			var datosusuarioA = {}
+			/*
+			navigator.serviceWorker.register("./sw.js");
+
+			let promptEvent = null;
+			window.addEventListener("beforeinstallprompt",(e)=>{
+				console.log("lista para instalar");
+				promptEvent = e;
+				document.getElementById("instalar").classList.add("Active");
+			});
+
+			document.getElementById("instalar").addEventListener("click", (e)=>{
+				promptEvent = e;
+			});
+			*/
+			function inicio() {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+						document.getElementById("titulosocio").innerHTML = respuesta.nombresocio;
+
+						cards = respuesta.cards;
+						for (var i = 0; i < cards.length; i++) {
+							// Parte superior
+							// Logo
+							lgc = document.createElement("img");
+							lgc.classList.add("left");
+							lgc.src = "../img/"+cards[i].logoproveedor;
+							lgc.width = 60;
+							lgc.height = 60;
+							// Titulo
+							txtgc = document.createTextNode("Gift Card");
+							tgc = document.createElement("h1");
+							tgc.classList.add("title");
+							tgc.appendChild(txtgc);
+							// Monto
+							txtm = document.createTextNode(formatNumber.new(cards[i].saldo)+" "+cards[i].simbolomoneda);
+							mgc = document.createElement("h3");
+							mgc.id = cards[i].card+"-monto";
+							mgc.classList.add("price");
+							mgc.appendChild(txtm);
+							// Parte alta de la tarjeta
+							tp = document.createElement("div");
+							tp.classList.add("top");
+							tp.style.background = cards[i].color;
+							tp.appendChild(lgc);
+							tp.appendChild(tgc);
+							tp.appendChild(mgc);
+							// Parte inferior
+							// simbolo
+							sgc = document.createElement("img");
+							sgc.id = cards[i].card+"-qr";
+							sgc.style.margin = "-5.5px 5.5px";
+							sgc.src = "../img/"+cards[i].dibujomoneda;
+							sgc.width = 50;
+							sgc.height = 50;
+							console.log(sgc.margin);
+							// seccion del qr
+							msgc = document.createElement("div");
+							msgc.classList.add("left");
+							msgc.appendChild(sgc);
+							// Status
+							txtst = document.createTextNode(cards[i].status);
+							stgc = document.createElement("h3");
+							stgc.id = cards[i].card+"-status";
+							stgc.classList.add("status");
+							if (cards[i].status!="Lista para usarse") {
+								stgc.style.color = "red";
+							}
+							stgc.appendChild(txtst);
+							// seccion del status
+							dstgc = document.createElement("div");
+							dstgc.classList.add("right");
+							dstgc.appendChild(stgc);
+							// Parte baja de la tarjeta
+							bt = document.createElement("div");
+							bt.classList.add("bottom");
+							bt.appendChild(msgc);
+							bt.appendChild(dstgc);
+							// Cuadro tarjeta
+							dcard = document.createElement("div");
+							dcard.id = cards[i].card;
+							dcard.classList.add("block");
+							dcard.classList.add("front");
+							dcard.title = "Haga click para seleccionar";
+							dcard.addEventListener('click', function(){ abremodal(this.id) });
+							dcard.appendChild(tp);
+							dcard.appendChild(bt);
+							// Agregar al catálogo
+							document.getElementById("cards").appendChild(dcard);
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/buscagiftcards.php?idsocio="+idsocio, true);
+				xmlhttp.send();
+			}
+
+			function abremodal2() {
+				document.getElementById("compragiftcard").style.display = 'block';
+				document.getElementById("formulariocompra").style.display = 'none';
+			}
+
+			function formulario(moneda) {
+				tipomoneda = moneda;
+				switch (moneda) {
+					case 'bs':
+						divisa = 1
+					break
+
+					default:
+						divisa = 1
+					break
+				}
+				document.getElementById("monedas").style.display = 'none';
+				document.getElementById("formulariocompra").style.display = 'block';
+			}
+
+			function online(online) {
+				var continuar = true, vacios = 0, campo = "";
+				if (document.getElementById("montocompra").value=="" || document.getElementById("montocompra").value==undefined) {
+					alert("El campo monto no puede quedar en blanco");
+					vacios++;
+					campo = "montocompra";
+					continuar = false;
+				}
+				
+				if (continuar) {
+					// document.getElementById("formulariocompra").style.display = 'none';
+					// document.getElementById("monedas").style.display = 'flex';
+					if (online) {
+						pagoenlinea(tipomoneda); 
+						// document.getElementById("bolivares").removeEventListener('click', reportebs);
+						// // document.getElementById("dolares").removeEventListener('click', reportedolar);
+						// document.getElementById("bolivares").addEventListener('click', pagobs);
+						// // document.getElementById("dolares").addEventListener('click', pagodolar);
+					} else {
+						var datoUser = {
+							nombres: document.getElementById("nombres2").value || 'Sin Nombres',
+							apellidos: document.getElementById("apellidos2").value || 'Sin Apellidos',
+							telefono: document.getElementById("telefono2").value || 'Sin Telefonos',
+							email: document.getElementById("email2").value || 'Sin correo electronico',
+							monto: document.getElementById("montocompra").value || '0',
+							transaccion: null,
+							comprobante: null,
+							origen: null
+						}
+						datosusuarioA = datoUser
+						document.getElementById("formulariocompra").style.display = 'none';
+						document.getElementById("reportepago").style.display = 'block';
+						document.getElementById("montocompra2").value = datoUser.monto
+						// reportepago(tipomoneda); 
+						// document.getElementById("bolivares").removeEventListener('click', pagobs);
+						// // document.getElementById("dolares").removeEventListener('click', pagodolar);
+						// document.getElementById("bolivares").addEventListener('click', reportebs);
+						// // document.getElementById("dolares").addEventListener('click', reportedolar);
+					}
+				} else {
+					document.getElementById(campo).focus();
+				}
+			}
+
+			function pagoenlinea(divisa) {
+				alert('x');
+				var datos = new FormData(), monto = document.getElementById("montocompra").value;
+				datos.append("monto", document.getElementById("montocompra").value);
+				datos.append("nombres", document.getElementById("nombres2").value);
+				datos.append("apellidos", document.getElementById("apellidos2").value);
+				datos.append("telefono", document.getElementById("telefono2").value);
+				datos.append("email", document.getElementById("email2").value);
+				datos.append("idsocio", idsocio);
+				datos.append("idproveedor", idproveedor);
+				datos.append("moneda", divisa);
+
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					//if (this.readyState == 4 && this.status == 200) {
+					//	respuesta = JSON.parse(this.responseText);
+					//	if (respuesta.exito == 'SI') {
+					//		propiedades="top=20%, left=50%, width=450, height=635, menubar=0, resizable=0, status=0, titlebar=0, toolbar=0";
+					//		window.open("../php/formapagoenlinea.php?card="+respuesta.card+"&monto="+monto+"&ruta=giftcards","_blank",propiedades);
+					//	} else {
+					//		alert('Ocurrió un error, por favor intentalo de nuevo.');
+					//	}
+					//}
+				};
+				if (divisa=="bs") {
+					xmlhttp.open("POST", "../php/pagoenlinea.php", true);
+				// } else {
+				// 	xmlhttp.open("POST", "../php/reportapago.php", true);
+				}
+				xmlhttp.send(datos);
+
+			}
+			function pago_reportedepago() {
+				datosusuarioA.transaccion = document.getElementById("tipotransaccion").value
+				datosusuarioA.comprobante = document.getElementById("documento_comprobante").value
+				datosusuarioA.origen = document.getElementById("origen").value
+				var datos = new FormData()
+				datos.append("monto", datosusuarioA.monto);
+				datos.append("nombres", datosusuarioA.nombres);
+				datos.append("apellidos", datosusuarioA.apellidos);
+				datos.append("telefono", datosusuarioA.telefono);
+				datos.append("email", datosusuarioA.email);
+				datos.append("idsocio", idsocio);
+				datos.append("idproveedor", idproveedor);
+				datos.append("moneda", divisa);
+				datos.append("tipotransaccion", datosusuarioA.transaccion);
+				datos.append("documento", datosusuarioA.comprobante);
+				datos.append("origen", datosusuarioA.origen);
+
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						alert(respuesta.mensaje)
+					} else {
+						// console.log(`Error al consultar (index.html :: 356) readyState ${this.readyState} && state ${this.status}`)
+					}
+				};
+				xmlhttp.open("POST", "../php/targetaderegalo.php", true);
+				xmlhttp.send(datos);				
+			}
+
+			function reportepago(divisa) {
+				alert('reporte '+divisa);
+			}
+
+			function cerrarmodal2() {
+				document.getElementById("monedas").style.display = 'flex';
+				document.getElementById("formulariocompra").style.display = 'none';
+				document.getElementById("compragiftcard").style.display = 'none';
+			}
+
+			function abremodal(id) {
+				document.getElementById(id+"-monto").innerHTML = document.getElementById(id+"-monto").innerHTML;
+				document.getElementById(id+"-qr").src = document.getElementById(id+"-qr").src;
+				document.getElementById("presentagiftcard").style.display = 'block';
+			}
+
+			function cerrarmodal() {
+				document.getElementById("presentagiftcard").style.display = 'none';
+			}
+
+			function habilitar(siono) {
+				if (siono) {
+					document.getElementById("nombres2").value = "";
+					document.getElementById("apellidos2").value = "";
+					document.getElementById("telefono2").value = "";
+					document.getElementById("email2").value = "";
+
+					document.getElementById("nombres2").disabled = true;
+					document.getElementById("apellidos2").disabled = true;
+					document.getElementById("telefono2").disabled = true;
+					document.getElementById("email2").disabled = true;
+				} else {
+					document.getElementById("nombres2").disabled = false;
+					document.getElementById("apellidos2").disabled = false;
+					document.getElementById("telefono2").disabled = false;
+					document.getElementById("email2").disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>
+
+<!--
+				<div>
+					<div id="1" class="block front" onclick="abremodal(this.id)" title="Haga click para seleccionar">
+  						<div class="top">
+    						<img class="left" src="../img/logoclub.png" width="60" height="60" draggable="false" />
+							<h1 class="title">Gift Card</h1>
+							<h3 id="1-monto" class="price">20.00 USD</h3>
+						</div>
+						<div class="bottom">
+							<div class="left">
+								<img id="1-qr" style="margin: -5.5px 5.5px;" src="../php/qr/000000001Z.png" width="50" height="50" draggable="false" />
+							</div>
+							<div class="right">
+								<h3 id="1-status" class="status">PENDIENTE</h3>
+
+								--
+ 								<button href="" class="give" onclick="alert('give')">Regalar</button>
+								<button href="" class="use" onclick="alert('use')">Usar</button>
+								--
+							</div>
+  						</div>
+					</div>
+				</div>
+				--  --
+				<div>
+					<div id="2" class="block front" onclick="abremodal(this.id)" title="Haga click para seleccionar">
+  						<div class="top">
+    						<img class="left" src="../img/logoclub.png" width="60" height="60" draggable="false" />
+							<h1 class="title">Gift Card</h1>
+							<h3 id="2-monto" class="price">30.00 USD</h3>
+						</div>
+						<div class="bottom">
+							<div class="left">
+								<img id="2-qr" style="margin: -5.5px 5.5px;" src="../php/qr/0000000020.png" width="50" height="50" draggable="false" />
+							</div>
+							<div class="right">
+								<h3 id="2-status" class="status">LISTA PARA USAR</h3>
+								--
+ 								<button href="" class="give" onclick="alert('give')">Regalar</button>
+								<button href="" class="use" onclick="alert('use')">Usar</button>
+								--
+							</div>
+  						</div>
+					</div>
+				</div>
+ -->
